@@ -8,7 +8,9 @@ $loggedInStatus = 0;
 //} 
 //get the admin account info
 //get admin list of courses
+
 $quizCount = $numQuestions;
+
 ?>
 <!DOCTYPE html>
 <!-- THIS DISPLAYS THE QUIZZES ATTACHED TO A SPECFIC QUIZ  --> 
@@ -31,10 +33,21 @@ $quizCount = $numQuestions;
             <?php include 'shared/admin_navigation.php'; ?>
             <div class="col-sm-7">
                 <h4> Create a new quiz for <?php echo $_SESSION['courseName'] ?></h4>
-                
-                
-                
-                
+                <div class="row" style="margin-left:20px;">
+                    <h5>Select the type of question to add: </h5>
+                       <input type="radio" id="toggle" name="questionType" value="multiple_choice" style="padding-right:10px;"/><label style="padding-right:20px;">Multiple Choice</label>
+                       <input type="radio" id="toggle" name="questionType" value="true_false" style="padding-right:10px;"/><label style="padding-right:20px;">True False</label>       
+                       <input type="radio" id="toggle" name="questionType" value="fill_blank" style="padding-right:10px;"/><label style="padding-right:20px;">Fill in the Blank</label>
+                </div>
+                <div class="row" style="margin-left:20px;">
+                         multiple choice question here
+                </div>
+                <div class="row hidden" style="margin-left:20px;">
+                         true false question here
+                </div>
+                <div class="row hidden" style="margin-left:20px;">
+                         fill in the blank question here
+                </div>
             </div>
         </div>
         <footer>
@@ -48,51 +61,25 @@ $quizCount = $numQuestions;
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.11.2.min.js"><\/script>');</script>
     <script src="../scripts/vendor/bootstrap.min.js"></script>
-    <script src="../js/main.js"></script>
-
+   
 
 </html>
 <script type="text/javascript">
-    $(document).ready(function()
-    {    
+    $(document).ready(function(){    
        
+       $('input[type=radio]').change(function(){
+            //alert(this.value);
+            
+            if(this.value === 'multiple_choice')
+            {
+                
+            }
+            else if(this.value === 'true_false')
+            {
+                
+            }
+            else if(this.value === 'fill_blank')
+        });
     });
-
-
-
-    $("#subtotal").change( function() {   //just for display 
-        //might need to implement another event for touch screen/phone responses? $(element).on(isMobile ? 'touchend' : 'click', function(e) {...});
-        var subtotal = document.getElementById("subtotal").value;
-        var salestax = subtotal * .075;
-        var total = Number(subtotal) + Number(salestax);
-        
-        document.getElementById("salestax").innerHTML = salestax;
-        document.getElementById("total").innerHTML= total;
-    });
-
-    function validateInput(){
-        //try to do some validation stuff here
-    }
-
-   
-    function updateText() { //updates client info once a client is selected
-        var selectbox = document.getElementById("client_list");
-        var x = selectbox.options[selectbox.selectedIndex].value;
-        var myArray = @Html.Raw(Json.Encode(Model.ListClients));
-        
-        var firstName = myArray[x].FirstName;
-        var lastName = myArray[x].LastName;
-        var street = myArray[x].BusinessStreetAddress;
-        var city = myArray[x].City;
-        var state = myArray[x].State;
-        var zip = myArray[x].Zip;
-        var clientID = myArray[x].UserID;
-
-        document.getElementById("select_client_id").value = clientID;
-        document.getElementById("contactname").innerHTML = firstName + " " + lastName;
-        document.getElementById("street").innerHTML = street;
-        document.getElementById("citystatezip").innerHTML = city + ", " + state + " " + zip;
-    }
-       
 
 </script>

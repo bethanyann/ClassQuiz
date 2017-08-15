@@ -54,7 +54,7 @@ switch($action){
         $quiz = new Quiz;
         $quiz->numberOfQuestions = $numQuestions;
         $quiz->quizChapterNumber = $chapterNum;
-        $quiz->quizClassNumber = $courseName;
+        $quiz->quizClassNumber = $_SESSION['courseName'];
         include '../admin_create_quiz.php';
         break;
     case 'saveNewQuiz' :      
