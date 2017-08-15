@@ -35,23 +35,51 @@ $quizCount = $numQuestions;
                 <h4> Create a new quiz for <?php echo $_SESSION['courseName'] ?></h4>
                 <div class="row" style="margin-left:20px;">
                     <h5>Select the type of question to add: </h5>
-                       <input type="radio" id="toggle" name="questionType" value="multiple_choice" style="padding-right:10px;"/><label style="padding-right:20px;">Multiple Choice</label>
-                       <input type="radio" id="toggle" name="questionType" value="true_false" style="padding-right:10px;"/><label style="padding-right:20px;">True False</label>       
-                       <input type="radio" id="toggle" name="questionType" value="fill_blank" style="padding-right:10px;"/><label style="padding-right:20px;">Fill in the Blank</label>
+                       <input type="radio" id="toggle" name="questionType" value="multiple_choice" style="margin-right:6px;"/><label style="padding-right:20px;">Multiple Choice</label>
+                       <input type="radio" id="toggle" name="questionType" value="true_false" style="margin-right:6px;"/><label style="padding-right:20px;">True False</label>       
+                       <input type="radio" id="toggle" name="questionType" value="fill_blank" style="margin-right:6px;"/><label style="padding-right:20px;">Fill in the Blank</label>
                 </div>
-                <div class="row" style="margin-left:20px;">
-                         multiple choice question here
+                <div class="row" id="multiple" style="margin-left:20px; display:none;">
+                         
+                         <form class="form-group" action="admin_controller.php" method="POST">
+                             <table class="table table-responsive">
+                                 <tr>
+                                    <td class="col-sm-4"><label>Question:</label></td>
+                                    <td><input type="text" name="question" class="form-control"></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="col-sm-4"><label>correct answer choice:</label></td>
+                                    <td><input type="text" name="correct_answer" class="form-control"></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="col-sm-4"><label>incorrect answer choice 2:</label></td>
+                                    <td><input type="text" name="incorrect_answer" class="form-control"></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="col-sm-4"><label>incorrect answer choice 3:</label></td>
+                                    <td><input type="text" name="incorrect_answer2" class="form-control"></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="col-sm-4"><label>incorrect answer choice 4:</label></td>
+                                    <td><input type="text" name="incorrect_answer3" class="form-control"></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="col-sm-4"></td>
+                                    <td><button type="submit" class="btn btn-primary" name="action" value="saveQuestion">Save Question &raquo;</button><td>
+                                 </tr>
+                             </table>   
+                         </form>
                 </div>
-                <div class="row hidden" style="margin-left:20px;">
+                <div class="row" id="truefalse" style="margin-left:20px; display:none;">
                          true false question here
                 </div>
-                <div class="row hidden" style="margin-left:20px;">
+                <div class="row" id="fillblank" style="margin-left:20px; display:none;">
                          fill in the blank question here
                 </div>
             </div>
         </div>
         <footer>
-            <p>&copy; capstone project 2017</p>
+            <p class="text-center">&copy; capstone project 2017</p>
         </footer>
     </div> <!--end of container -->
 
@@ -72,13 +100,22 @@ $quizCount = $numQuestions;
             
             if(this.value === 'multiple_choice')
             {
-                
+                $('#multiple').css('display','block');
+                $('#truefalse').css('display', 'none');
+                $('#fillblank').css('display', 'none');
             }
             else if(this.value === 'true_false')
             {
-                
+                $('#multiple').css('display','none');
+                $('#truefalse').css('display', 'block');
+                $('#fillblank').css('display', 'none');
             }
             else if(this.value === 'fill_blank')
+            {
+                $('#multiple').css('display', 'none');
+                $('#truefalse').css('display', 'none');
+                $('#fillblank').css('display', 'block');
+            }
         });
     });
 
