@@ -11,6 +11,6 @@
  *
  * @author the hobbits
  */
-class user {
+class User {
     //put your code here
 }

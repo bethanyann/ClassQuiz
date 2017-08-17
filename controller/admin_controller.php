@@ -1,5 +1,5 @@
 <?php
-// *****ADMINISTRATOR CONTROLLER *****
+// *****ADMINISTRATOR MANAGEMENT CONTROLLER *****
 $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
 session_set_cookie_params($lifetime, '/');
 session_start();
@@ -27,7 +27,7 @@ switch($action){
         //get admin classes & save in a list
          $adminCourses = GetAdminCourses($adminID);        
         //go to admin page
-        include '../admin_dashboard.php';
+        include '../view/admin_dashboard.php';
         break;
     case 'viewQuizzes':        
         $courseName = $_REQUEST['courseName'];  //FIX THIS LATER
@@ -40,27 +40,8 @@ switch($action){
         $_SESSION['courseName'] = $courseName;
         $_SESSION['courseID'] = $courseID;
         //send to admin dashboard quiz view page.
-        include '../admin_quiz_list.php';
+        include '../view/admin_quiz_list.php';
         break; 
-    case 'createNewQuiz':  
-        
-        $chapterNumber = filter_input(INPUT_POST, 'chapterNum');
-        $numberQuestions = filter_input(INPUT_POST, 'numQuestions');
-        
-        $chapterNum = htmlspecialchars($chapterNumber);
-        $numQuestions = htmlspecialchars($numberQuestions);
-        
-        //make a new quiz object
-        $quiz = new Quiz;
-        $quiz->numberOfQuestions = $numQuestions;
-        $quiz->quizChapterNumber = $chapterNum;
-        $quiz->quizClassNumber = $_SESSION['courseName'];
-        include '../admin_create_quiz.php';
-        break;
-    case 'saveNewQuiz' :      
-        break;
-    case 'editQuiz':
-        break;
     case 'manageStudents':
         //have this redirect to another controller
         break;

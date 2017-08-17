@@ -9,8 +9,8 @@ $loggedInStatus = 0;
 //get the admin account info
 //get admin list of courses
 
-$quizCount = $numQuestions;
-
+$questionTotal = $numQuestions;
+$questionCount = $_SESSION('questionCount');
 ?>
 <!DOCTYPE html>
 <!-- THIS DISPLAYS THE QUIZZES ATTACHED TO A SPECFIC QUIZ  --> 
@@ -24,23 +24,24 @@ $quizCount = $numQuestions;
     <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../css/classquiz_main.css">
     <script src="../scripts/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-</head><
+</head>
 <body>
-    <?php include 'shared/navigation.php'; ?>
+    <?php include '../shared/navigation.php'; ?>
     <div class="container-fluid" style="min-height: 400px">
         <!-- Example row of columns -->
         <div class="row">
-            <?php include 'shared/admin_navigation.php'; ?>
+            <?php include '../shared/admin_navigation.php'; ?>
             <div class="col-sm-7">
                 <h4> Create a new quiz for <?php echo $_SESSION['courseName'] ?></h4>
                 <div class="row" style="margin-left:20px;">
+                    <h3>Question #1 out of <?php echo $questionCount ?></h3>
                     <h5>Select the type of question to add: </h5>
                        <input type="radio" id="toggle" name="questionType" value="multiple_choice" style="margin-right:6px;"/><label style="padding-right:20px;">Multiple Choice</label>
                        <input type="radio" id="toggle" name="questionType" value="true_false" style="margin-right:6px;"/><label style="padding-right:20px;">True False</label>       
                        <input type="radio" id="toggle" name="questionType" value="fill_blank" style="margin-right:6px;"/><label style="padding-right:20px;">Fill in the Blank</label>
                 </div>
                 <div class="row" id="multiple" style="margin-left:20px; display:none;">
-                         
+                    
                          <form class="form-group" action="admin_controller.php" method="POST">
                              <table class="table table-responsive">
                                  <tr>
@@ -48,19 +49,19 @@ $quizCount = $numQuestions;
                                     <td><input type="text" name="question" class="form-control"></td>
                                  </tr>
                                  <tr>
-                                    <td class="col-sm-4"><label>correct answer choice:</label></td>
+                                    <td class="col-sm-4"><label>Correct Answer:</label></td>
                                     <td><input type="text" name="correct_answer" class="form-control"></td>
                                  </tr>
                                  <tr>
-                                    <td class="col-sm-4"><label>incorrect answer choice 2:</label></td>
-                                    <td><input type="text" name="incorrect_answer" class="form-control"></td>
+                                    <td class="col-sm-4"><label>Incorrect Answer Choice #1:</label></td>
+                                    <td><input type="text" name="incorrect_answer1" class="form-control"></td>
                                  </tr>
                                  <tr>
-                                    <td class="col-sm-4"><label>incorrect answer choice 3:</label></td>
+                                    <td class="col-sm-4"><label>Incorrect Answer Choice #2:</label></td>
                                     <td><input type="text" name="incorrect_answer2" class="form-control"></td>
                                  </tr>
                                  <tr>
-                                    <td class="col-sm-4"><label>incorrect answer choice 4:</label></td>
+                                    <td class="col-sm-4"><label>Incorrect Answer Choice #3:</label></td>
                                     <td><input type="text" name="incorrect_answer3" class="form-control"></td>
                                  </tr>
                                  <tr>

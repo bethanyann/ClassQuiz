@@ -29,11 +29,11 @@ if(!$adminCourses)
 </head>
 
 <body>
-    <?php include 'shared/navigation.php'; ?>
+    <?php include '../shared/navigation.php'; ?>
     <div class="container-fluid">
         <!-- Example row of columns -->
         <div class="row">
-            <?php include 'shared/admin_navigation.php'; ?>
+            <?php include '../shared/admin_navigation.php'; ?>
             <div class="col-sm-7">
                 <h2>Current Courses</h2>         
                 <table class="table table-responsive table-bordered">

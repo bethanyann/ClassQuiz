@@ -1,15 +1,11 @@
 <?php
-/**
- * Description of course
- * will be the name of the course, instructor name?, and number of chapters
- * 
- */
-class course {
+
+class Course {
     //put your code here
     
     private $courseName;
     private $numberOfChapters;
     
-    function __construct() {;}
+    function __construct() { }
     
 }

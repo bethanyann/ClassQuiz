@@ -12,5 +12,6 @@ class Quiz {
     public $numberOfQuestions;
     public $questionList = array();
     
+    
     function __construct() { }
 }

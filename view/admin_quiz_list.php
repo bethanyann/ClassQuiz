@@ -23,9 +23,9 @@ $loggedInStatus = 0;
 </head>
 
 <body>
-    <?php include 'shared/navigation.php'; ?>
+    <?php include '../shared/navigation.php'; ?>
     <div class="container-fluid" style="min-height: 400px"> 
-        <?php include 'shared/admin_navigation.php'; ?>
+        <?php include '../shared/admin_navigation.php'; ?>
 
         <?php if (!$listOfQuizzes): ?>
             <div class="row">
@@ -35,7 +35,7 @@ $loggedInStatus = 0;
                     <h3>This class doesn't have any quizzes set up yet.</h3>
                     <br>
                     <h4> Set up a new quiz:</h4> <br>
-                    <form class="form-group" action="admin_controller.php" method="POST">
+                    <form class="form-group" action="quiz_controller.php" method="POST">
                         <table class="table table-responsive ">
                             <tr class="form-group">
                                 <td class="col-sm-4 text-left"><label for="numQuestions">Number of questions on the quiz: </label></td>
@@ -59,7 +59,7 @@ $loggedInStatus = 0;
             <div class="row">
                 <div class="col-sm-7">
                     <h2> <?php echo $_SESSION['courseName'] ?></h2>
-                    <form action="admin_controller.php" metod="POST">
+                   
                         <table class="table table-responsive table-bordered">
                             <tr>
                                 <th class="text-center">Quiz Chapter</th>
@@ -76,12 +76,12 @@ $loggedInStatus = 0;
                                 </tr>
                             <?php endforeach; ?>
                         </table>
-                    </form>   
+                      
                 </div> 
             </div>
             <div class="row">
                 <h4>Create a New Quiz</h4>
-                <form class="form-group" action="admin_controller.php" method="POST">
+                <form class="form-group" action="quiz_controller.php" method="POST">
                     <table class="table table-responsive ">
                         <tr class="form-group">
                             <td class="col-sm-4 text-left"><label for="numQuestions">Number of questions on the quiz: </label></td>
