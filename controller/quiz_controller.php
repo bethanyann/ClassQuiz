@@ -1,4 +1,6 @@
 <?php
+
+class quiz_controller extends Controller {}
 // *****QUIZ CREATION CONTROLLER *****
 $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
 session_set_cookie_params($lifetime, '/');
@@ -9,60 +11,150 @@ include '../classes/Quiz.php';
 include '../classes/Question.php';
 include '../classes/Answer.php';
 
+
+
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {
     $action = filter_input(INPUT_GET, 'action');
         if ($action === NULL) {
         $action = 'createNewQuiz';
+        
     }
 }
 
-//global "count" variable that will control the quiz creation and question-adding loop
-//$quizQuestionCount
+//global quiz variable once a quiz is created
+global $quiz; 
+
 switch ($action){
     case 'createNewQuiz': // this action is coming in from the admin_quiz_list page 
                           //after an admin says they wanna create a new quiz
-        //get the course information out of the session 
-        $_SESSION['courseName'] = $courseName;
-        $_SESSION['courseID'] = $courseID;
+        //get the course information out of the session -working
+        $courseName = $_SESSION['courseName'];
+        $courseID = $_SESSION['courseID'];
         
-        //get the quiz information from the form
+        //get the quiz information from the form - working
         $chapterNumber = filter_input(INPUT_POST, 'chapterNum');
         $numberQuestions = filter_input(INPUT_POST, 'numQuestions');
-        
         $chapterNum = htmlspecialchars($chapterNumber);
         $numQuestions = htmlspecialchars($numberQuestions);
         
         //make a new quiz object
-        $quiz = new Quiz;
+        $quiz = new Quiz();  //figure out a better way to do a global quiz 
         $quiz->numberOfQuestions = $numQuestions;
         $quiz->quizChapterNumber = $chapterNum;
-        $quiz->quizClassNumber = $_SESSION['courseName'];
+        $quiz->courseID = $courseID;
         
-        //store the new quiz in a session?
-        $_SESSION['quiz'] = $quiz;
+        //store the new quiz in a global variable to keep it until the quiz is ready to be saved
+        //--working? 
+      
         //store the question numbers in the session        
         $_SESSION['numQuestions'] = $numQuestions;
-        
-        //set $quizQuestionCount = $numQuestions
-        //should I store that in a variable or a session? 
-        //might be better in a session that way I can use it in the 
-        //quiz question view to show Question # out of #
+        $_SESSION['questionCounter'] = 1;  //set the counter to 1
+      
         include '../view/admin_create_quiz.php';
         break;
     
-    case 'saveQuestion' : 
-        //IF($quizQuestionCount <= $numQuestions {
-        //each time the user wants to save a question, i need to grab the data and 
-        //store each question and answer object in the 'quiz' class
+    case 'saveQuestion': //this action will be hit every time the user wants to save a question/answer set
+        if (isset($quiz)) //if the quiz has been started
+        {
+            //each time the user wants to save a question, i need to grab the data and 
+            //store each question and answer object in the 'quiz' class
+            $totalNumQuestions = $_SESSION['numQuestions'];
+            $questionCounter = $_SESSION['questionCounter'];
+            
+            //get question type
+            $qt = filter_var(INPUT_POST, 'questionType');
+            $questionType = htmlspecialchars($qt);
+            
+            //get question text
+            $qtext = filter_var(INPUT_POST, 'question'); 
+            $questionText = htmlspecialchars($qtext);
+            
+            //get the correct answer page number
+            $pn = filter_var(INPUT_POST, 'page_number');
+            $pageNumber = htmlspecialchars($pn);
+                       
+            //now based on question type, grab the answers and put them in the question's answer array
+            if($question->questionType === "multiple_choice") //test this, it might not work quite right
+            {
+                $answers = array();
+                $answer = new Answer();
+                //there will be 1 correct answer
+                $ca = filter_var(INPUT_POST, 'correct_answer');
+                $correctAnswer = htmlspecialchars($ca);
         
-        //OR. grab the answers first, save those in an array of answers. 
-        //then make a question object and get the question
-        //stuff the answer array into the question object
-        //$question->$answerArray[x].answerText ... etc
+                $answer->isCorrect = 1;
+                $answer->answerText = $correctAnswer;
+                $answers[] = $answer;
+             
+                //and 3 incorrect answers
+                $ia1 = filter_var(INPUT_POST, 'incorrect_answer1');
+                $incorrectAnswer1 = htmlspecialchars($ia1);
+                $answer->answerText = $incorrectAnswer1;
+                $answer->isCorrect = 0;
+                $answers[] = $answer;
+             
+                
+                $ia2 = filter_var(INPUT_POST, 'incorrect_answer2');
+                $incorrectAnswer2 = htmlspecialchars($ia2);
+                $answer->answerText = $incorrectAnswer2;
+                $answer->isCorrect = 0;
+                $answers[] = $answer;
+                
+                $ia3 = filter_var(INPUT_POST, 'incorrect_answer3');
+                $incorrectAnswer3 = htmlspecialchars($ia3);
+                $answer->answerText = $incorrectAnswer3;
+                $answer->isCorrect = 0;
+                $answers[] = $answer;
+                
+                //make question object
+                $question = new Question($answers, $questionText, $questionType, $pageNumber);//add the answers to the question array
+            
+                //add the question to the Quiz 
+                $quiz->questionList[] = $question;
+                
+            }
+            else if($question->questionType === "true_false")
+            {
+                //TO DO
+                
+                //there will be one correct answer, either "true" or "false"
+                
+                //isCorrect = true or false 
+                //answerText = true or false
+            }
+            else if($question->questionType === "fill_blank")
+            {
+                //TO DO
+                
+                //I don't know if I want to do this one yet or not
+                //baby steps
+            }
+            else
+            {
+                //print out the error to help debug
+                console.print_r("The question type actually is" . " " . $question->questionType);
+            }  
+            
+            
+            //TO DO
+            //add question to the quiz array HERE
+            
+            
+            
+            $_SESSION['questionCounter'] = ($questionCounter - 1);
+        }
+        else
+        {
+            include '../view/admin_quiz_list.php';
+        }
+        
+        
+       
         
         //then save the question to the quiz question array
         //$quiz->$questionArray[x] = $
+      
         
         $q = filter_input(INPUT_POST, 'question');
         $ca = filter_input(INPUT_POST, 'correct_answer');   
@@ -72,13 +164,13 @@ switch ($action){
         
         //dont forget to make a thing for what page # the correct answer can be found on. 
         
-        $questionType = filter_var(INPUT_POST, 'questionType');
         
         //need a quiz object in the database before saving a question
         
         //after everything is saved, 
-        //$quizQuestionCount--
-        //
+        //$quizQuestionCount--;
+        //if($quizQuestionCount <= $numQuestions {
+        //  //go back to admin_create_quiz page 
         //}
         //else { if the question limit has been reached, save everything to database}
         // and redirect back to the admin_quiz_list page to see the quiz

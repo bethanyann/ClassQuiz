@@ -35,7 +35,7 @@ $loggedInStatus = 0;
                     <h3>This class doesn't have any quizzes set up yet.</h3>
                     <br>
                     <h4> Set up a new quiz:</h4> <br>
-                    <form class="form-group" action="quiz_controller.php" method="POST">
+                    <form class="form-group" action="quiz_controller.php" method="POST"> <!--building a new quiz directs to the quiz controller-->
                         <table class="table table-responsive ">
                             <tr class="form-group">
                                 <td class="col-sm-4 text-left"><label for="numQuestions">Number of questions on the quiz: </label></td>

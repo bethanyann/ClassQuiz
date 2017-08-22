@@ -9,8 +9,9 @@ $loggedInStatus = 0;
 //get the admin account info
 //get admin list of courses
 
-$questionTotal = $numQuestions;
-$questionCount = $_SESSION('questionCount');
+$numQuestions = $_SESSION['numQuestions'];
+$questionCounter = $_SESSION['questionCounter'];
+
 ?>
 <!DOCTYPE html>
 <!-- THIS DISPLAYS THE QUIZZES ATTACHED TO A SPECFIC QUIZ  --> 
@@ -34,7 +35,7 @@ $questionCount = $_SESSION('questionCount');
             <div class="col-sm-7">
                 <h4> Create a new quiz for <?php echo $_SESSION['courseName'] ?></h4>
                 <div class="row" style="margin-left:20px;">
-                    <h3>Question #1 out of <?php echo $questionCount ?></h3>
+                    <h3>Question #<?php ?> out of <?php echo $numQuestions ?></h3>
                     <h5>Select the type of question to add: </h5>
                        <input type="radio" id="toggle" name="questionType" value="multiple_choice" style="margin-right:6px;"/><label style="padding-right:20px;">Multiple Choice</label>
                        <input type="radio" id="toggle" name="questionType" value="true_false" style="margin-right:6px;"/><label style="padding-right:20px;">True False</label>       
@@ -42,7 +43,7 @@ $questionCount = $_SESSION('questionCount');
                 </div>
                 <div class="row" id="multiple" style="margin-left:20px; display:none;">
                     
-                         <form class="form-group" action="admin_controller.php" method="POST">
+                         <form class="form-group" action="quiz_controller.php" method="POST">
                              <table class="table table-responsive">
                                  <tr>
                                     <td class="col-sm-4"><label>Question:</label></td>
@@ -63,6 +64,10 @@ $questionCount = $_SESSION('questionCount');
                                  <tr>
                                     <td class="col-sm-4"><label>Incorrect Answer Choice #3:</label></td>
                                     <td><input type="text" name="incorrect_answer3" class="form-control"></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-sm-4"><label>Where in the book can the correct answer be found?</label></td>
+                                     <td><input type="text" name="page_number" class="form-control"></td>
                                  </tr>
                                  <tr>
                                     <td class="col-sm-4"></td>

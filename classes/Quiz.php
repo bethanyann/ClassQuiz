@@ -6,12 +6,14 @@
  * 
  */
 class Quiz {
-    //put your code here  
+ 
+    public $quizID;
     public $quizChapterNumber;
-    public $quizClassNumber;
+    public $courseID;
     public $numberOfQuestions;
-    public $questionList = array();
     
+    //this will hold all of the qustions in a particular quiz
+    public $questionList = array();
     
     function __construct() { }
 }

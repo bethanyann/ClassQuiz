@@ -1,10 +1,10 @@
 <?php
 
 class Course {
-    //put your code here
     
+    private $courseID;
     private $courseName;
-    private $numberOfChapters;
+    private $numberOfChapters; //might not use this
     
     function __construct() { }
     
