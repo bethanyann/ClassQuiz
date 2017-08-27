@@ -3,6 +3,7 @@
     left: auto;
 }
 
+
 /************** STYLING THE LEFT MENU ******************************/
 body:not(.sidebar-left-mini) #menu .nav-header {
     padding: 3px  !important;
@@ -46,5 +47,13 @@ body:not(.sidebar-left-mini) #menu .nav-header {
     border: 0 !important;
     clip: rect(1px, 1px, 1px, 1px) !important;
 }
+.admin_nav {
+    height:100vh;
+    background-color: #ccccff;
+}
 
+.float-left {
+    float: left;
+    padding-left: 10px;
+}
 ul.nav a:hover { color: blue !important; }

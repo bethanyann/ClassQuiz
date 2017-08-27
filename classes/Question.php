@@ -11,11 +11,6 @@ class Question {
     
     public $answers = array();
     
-    function __construct($the_answers, $the_questionText, $the_type, $the_pageNumber) 
-    { 
-        $this->answers = $the_answers;
-        $this->questionText = $the_questionText;
-        $this->questionType = $the_type;
-        $this->correctAnswerPageNumber = $the_pageNumber;
-    }
+    function __construct() {}
+    
 }

@@ -34,8 +34,9 @@ if(!$adminCourses)
         <!-- Example row of columns -->
         <div class="row">
             <?php include '../shared/admin_navigation.php'; ?>
+            <h2 class="text-center">Administrator Dashboard</h2>
             <div class="col-sm-7">
-                <h2>Current Courses</h2>         
+                <h3>Current Courses</h3>         
                 <table class="table table-responsive table-bordered">
                     <tr>
                         <th class="text-center">Course Number</th>

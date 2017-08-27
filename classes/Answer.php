@@ -2,10 +2,10 @@
 
 class Answer {
   
-   //public $questionID;
-   //public $answerID;
+    public $questionID;
+    public $answerID;
     public $isCorrect;
     public $answerText;
          
-    function __construct() { }
+    function __construct( )  {  }
 }

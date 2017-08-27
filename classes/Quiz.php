@@ -1,10 +1,5 @@
 <?php
 
-/** this will link a quiz to a specfic course
- *  and will have a set number of questions
- *
- * 
- */
 class Quiz {
  
     public $quizID;
@@ -16,4 +11,5 @@ class Quiz {
     public $questionList = array();
     
     function __construct() { }
+
 }

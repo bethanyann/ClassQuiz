@@ -32,12 +32,11 @@ $questionCounter = $_SESSION['questionCounter'];
             <div class="row">
                 <?php include '../shared/admin_navigation.php'; ?>
                 <div class="col-sm-7">
-                    <h4> Create a new quiz for <?php echo $_SESSION['courseName'] ?></h4>
+                    <h3 class="text-center"> Create a new quiz for <?php echo $_SESSION['courseName'] ?></h3>
                     <form class="form-group" action="quiz_controller.php" method="POST">     
                         <div class="row" style="margin-left:20px;">
-
-                            <h3>Question #<?php echo $questionCounter ?> out of <?php echo $numQuestions ?></h3>
-                            <h5>Select the type of question to add: </h5>
+                            <h4>Question #<?php echo $questionCounter ?> out of <?php echo $numQuestions ?></h4>
+                            <h5 style="display:inline; padding-right:15px;">Select the type of question to add:</h5>
                             <input type="radio" id="toggle" name="questionType" value="multiple_choice" style="margin-right:6px;"/><label style="padding-right:20px;">Multiple Choice</label>
                             <input type="radio" id="toggle" name="questionType" value="true_false" style="margin-right:6px;"/><label style="padding-right:20px;">True False</label>       
                             <input type="radio" id="toggle" name="questionType" value="fill_blank" style="margin-right:6px;"/><label style="padding-right:20px;">Fill in the Blank</label>

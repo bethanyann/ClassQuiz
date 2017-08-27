@@ -1,4 +1,4 @@
-<div class="col-sm-3" style="padding-left:0px;">
+<div class="col-sm-3 admin_nav" style="padding-left:0px;">
                 <h4 class="text-center">Administrator Page</h4>
                 <ul id="menu">
                     <li class="nav-header text-center">Menu</li>
@@ -7,4 +7,4 @@
                     <li class="" style="padding-left:10px;"><a href=""> <span class="link-title">&nbsp;Manage Students</span></a></li>
                     <li class="" style="padding-left:10px;"><a href=""> <span class="link-title">&nbsp;Manage Account</span></a></li>                     
                 </ul>
-            </div>
+</div>
