@@ -59,57 +59,64 @@ switch ($action){
             //each time the user wants to save a question, i need to grab the data and 
             //store each question and answer object in the 'quiz' class
             $totalNumQuestions = $_SESSION['numQuestions'];
-            $questionCounter = $_SESSION['questionCounter'];
-            
+            $questionCounter = $_SESSION['questionCounter'];       
             //get question type
             $qt = $_POST['questionType'];     
             $questionType = htmlspecialchars($qt);
-            
-            
             //get question text
             $qtext = filter_input(INPUT_POST, 'question'); 
-            $questionText = htmlspecialchars($qtext);
-            
+            $questionText = htmlspecialchars($qtext);       
             //get the correct answer page number
             $pn = filter_input(INPUT_POST, 'page_number');
             $pageNumber = htmlspecialchars($pn);
                        
             //now based on question type, grab the answers and put them in the question's answer array
-            if($questionType === "multiple_choice") //working!
+            if($questionType === "multiple_choice") 
             {   
                 //make a new array 
                 $answers = array();
-                
                 //there will be 1 correct answer
                 $ca = filter_input(INPUT_POST, 'correct_answer');
                 $correctAnswer = htmlspecialchars($ca);
-                $answer = new Answer(); 
-                $answer->isCorrect = 1;
-                $answer->answerText = $correctAnswer;
-                $answers[] = $answer;
+                $c_answer = new Answer(); 
+                $c_answer->isCorrect = 1;
+                $c_answer->answerText = $correctAnswer;
+                $answers[] = $c_answer;
              
                 //and 3 incorrect answers
                 $ia1 = filter_input(INPUT_POST, 'incorrect_answer1');
                 $incorrectAnswer1 = htmlspecialchars($ia1);
-                $answer = new Answer();
-                $answer->isCorrect = 0;
-                $answer->answerText = $incorrectAnswer1;
-                $answers[] = $answer;
+                $i1_answer = new Answer();
+                $i1_answer->isCorrect = 0;
+                $i1_answer->answerText = $incorrectAnswer1;
+                $answers[] = $i1_answer;
                 
                 $ia2 = filter_input(INPUT_POST, 'incorrect_answer2');
                 $incorrectAnswer2 = htmlspecialchars($ia2);
-                $answer = new Answer();  
-                $answer->isCorrect = 0;
-                $answer->answerText = $incorrectAnswer2;
-                $answers[] = $answer;
+                $i2_answer = new Answer();  
+                $i2_answer->isCorrect = 0;
+                $i2_answer->answerText = $incorrectAnswer2;
+                $answers[] = $i2_answer;
                 
                 $ia3 = filter_input(INPUT_POST, 'incorrect_answer3');
                 $incorrectAnswer3 = htmlspecialchars($ia3);
+                $i3_answer = new Answer(); 
+                $i3_answer->isCorrect = 0;
+                $i3_answer->answerText = $incorrectAnswer3;
+                $answers[] = $i3_answer;
+            }
+            else if($questionType === "true_false")
+            {
+                $answers = array();
+                 
+                $tf = $_POST['true_false_correct_answer'];     
+                $correctAnswer = htmlspecialchars($tf); //will either be True or False
                 $answer = new Answer(); 
-                $answer->isCorrect = 0;
-                $answer->answerText = $incorrectAnswer3;
-                $answers[] = $answer;
-                
+                $answer->isCorrect = 1; //only going to save one answer for t/f
+                $answer->answerText = $correctAnswer;
+                 
+                $answers[] = $answer;               
+            }
                 //make question object
                 $question = new Question();
                 $question->answers = $answers;//add the answers to the question object's array
@@ -136,30 +143,8 @@ switch ($action){
                     include '../view/admin_save_new_quiz.php';
                     //be sure to set a question limit to 20 questions per quiz! 
                 }
-            }
-            else if($question->questionType === "true_false")
-            {
-                //TO DO
-                
-                //there will be one correct answer, either "true" or "false"
-                
-                //isCorrect = true or false 
-                //answerText = true or false
-            }
-            else if($question->questionType === "fill_blank")
-            {
-                //TO DO
-                
-                //I don't know if I want to do this one yet or not
-                //baby steps
-            }
-            else
-            {
-                //print out the error to help debug
-                console.print_r("The question type actually is" . " " . $question->questionType);
-            }          
-        }
-        else
+        } 
+        else //if the quiz is not set yet
         {
             //this doesn't work because it doesn't sent the list of quizzes back...
             $_SESSION['quiz'] = serialize($quiz);
@@ -212,7 +197,9 @@ switch ($action){
     case 'deleteQuiz' :
         $quiz = unserialize($_SESSION['quiz']);
         
-        $success = DeleteQuiz($quiz);
+        $qID = $quiz->quizID;
+ 
+        $success = DeleteQuiz($qID);
         if($success)
         {
             include   '../view/admin_quiz_list.php';

@@ -172,7 +172,7 @@ function SaveQuestions($id, $quiz) {
             $question_id = $db->lastInsertId();
 
             foreach ($question->answers as $answer) {   //now insert the answers attached to each question
-                global $db; //do i need this again? rprobably not bc its the same connection
+               
                 try {
                     $query = 'INSERT INTO answer( questionID, answerText, isCorrect )
                         VALUES
@@ -200,4 +200,11 @@ function SaveQuestions($id, $quiz) {
         }  
     } //end of the FOREACH block for the questions
     return $results;
+}//END SAVE QUESTION
+
+function DeleteQuiz($quizID)
+{
+    
+    global $db;
+    $results = false;
 }

@@ -42,8 +42,6 @@ $questionCounter = $_SESSION['questionCounter'];
                             <input type="radio" id="toggle" name="questionType" value="fill_blank" style="margin-right:6px;"/><label style="padding-right:20px;">Fill in the Blank</label>
                         </div>
                         <div class="row" id="multiple" style="margin-left:20px; display:none;">
-
-
                             <table class="table table-responsive">
                                 <tr>
                                     <td class="col-sm-4"><label>Question:</label></td>
@@ -74,10 +72,27 @@ $questionCounter = $_SESSION['questionCounter'];
                                     <td><button type="submit" class="btn btn-primary" name="action" value="saveQuestion">Save Question &raquo;</button><td>
                                 </tr>
                             </table>   
-
                         </div>
                         <div class="row" id="truefalse" style="margin-left:20px; display:none;">
-                            
+                            <table class="table table-responsive">
+                                <tr>
+                                    <td class="col-sm-4"><label>Question:</label></td>
+                                    <td><input type="text" name="question" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-sm-4"><label>Correct Answer:</label>
+                                     <input type="radio" id="toggle" name="true_false_correct_answer" value="true" style="margin-right:6px;"/><label style="padding-right:20px;">True</label>
+                                     <input type="radio" id="toggle" name="true_false_correct_answer" value="false" style="margin-right:6px;"/><label style="padding-right:20px;">False</label>   </td>                
+                                </tr>
+                                <tr>                       
+                                    <td class="col-sm-4"><label>Where in the book can the correct answer be found?</label></td>
+                                    <td><input type="text" name="page_number" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-sm-4"></td>
+                                    <td><button type="submit" class="btn btn-primary" name="action" value="saveQuestion">Save Question &raquo;</button><td>
+                                </tr>
+                            </table>
                             
                             
                         </div>
