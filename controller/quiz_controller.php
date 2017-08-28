@@ -169,12 +169,13 @@ switch ($action){
     case 'saveQuiz' : //permanently saves the quiz, questions and answers
         $quiz = unserialize($_SESSION['quiz']);
         //need to make sure a quiz doesn't already exist for that chapter BEFORE saving quiz to avoid duplicates
+        //could I figure out ajax for this???? 
         $results = SaveQuiz($quiz);
         if($results)
-        {
+        {   //if the quiz successfully saved
             //get the new list of quizzes 
             $listOfQuizzes = GetCourseQuizzes($quiz->courseID);
-            include'../view/admin_quiz_list.php';
+            include'../view/admin_quiz_list.php'; //kinda want to rename this page
         }
         else
         {
@@ -203,9 +204,19 @@ switch ($action){
         //go get the questions and answers
         
         $quiz->questionList = GetQuizByQuizID($quiz);
-        
+        //put the quiz into the session
+        $_SESSION['quiz'] = serialize($quiz);
         //make a display quiz page where they can click to edit or click to delete the quiz? 
+        include '../view/admin_view_quiz.php';
+        break;
+    case 'deleteQuiz' :
+        $quiz = unserialize($_SESSION['quiz']);
         
+        $success = DeleteQuiz($quiz);
+        if($success)
+        {
+            include   '../view/admin_quiz_list.php';
+        }
         break;
     case 'editQuiz':
         

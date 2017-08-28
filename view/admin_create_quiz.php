@@ -77,7 +77,9 @@ $questionCounter = $_SESSION['questionCounter'];
 
                         </div>
                         <div class="row" id="truefalse" style="margin-left:20px; display:none;">
-                            true false question here
+                            
+                            
+                            
                         </div>
                         <div class="row" id="fillblank" style="margin-left:20px; display:none;">
                             fill in the blank question here

@@ -109,7 +109,7 @@ $loggedInStatus = 0;
     <?php endif; ?> 
 </div> <!-- /container -->    
 <footer>
-    <p class="text-center">&copy; capstone project 2017</p>
+    <p class="text-center">&copy; capstone project 2017 - bethany ann</p>
 </footer>
 
 

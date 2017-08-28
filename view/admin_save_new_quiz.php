@@ -5,16 +5,6 @@ $quiz = unserialize($_SESSION['quiz']);
 //use this as the limit for the loop
 $totalNumQuestions = $_SESSION['numQuestions'];
 
-//all of these work, leaving them here and commented out for reference sake
-//print_r($quiz->questionList[0]); //this worked! and printed the first question object
-//print_r($quiz->questionList[0]->answers[0]->answerText);
-//print_r($quiz->questionList[0]->answers[1]->answerText);
-//print_r($quiz->questionList[0]->answers[2]->answerText);
-//print_r($quiz->questionList[0]->answers[3]->answerText);
-//print_r($quiz->questionList[0]->questionText); //working
-//print_r($questionList[0]->answers[0]->answerText); //printed correct answer text
-//print_r($questionList[0]->questionText); //this does work! printed first question text
-//print_r(count($questionList[0]->answers)); //does this work? yes it gets count of 4
 
 $questionList = $quiz->questionList;
 ?> 
@@ -72,16 +62,16 @@ and confirm that it's what they want to save. Implement the ability to edit the 
                                     <?php endfor; ?>
                                 </table>   
                             <?php endfor; ?>
-                            <div class="col-sm-offset-6 pull-left">
-                                <button type="submit" class="btn btn-primary float-left" name="action" value="editQuiz" disabled>Edit Quiz &raquo;</button>
-                                <button type="submit" class="btn btn-primary pull-left" name="action" value="saveQuiz" style="margin-left:10px;">Save Quiz &raquo;</button>
+                            <div class="row text-center">
+                                <button type="submit" class="btn btn-primary" name="action" value="editQuiz" disabled>Edit Quiz &raquo;</button>
+                                <button type="submit" class="btn btn-primary" name="action" value="saveQuiz" style="margin-left:10px;">Save Quiz &raquo;</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
             <footer>
-                <p class="text-center">&copy; capstone project 2017</p>
+                <p class="text-center">&copy; capstone project 2017 - bethany ann</p>
             </footer>
         </div> <!-- end container? -->
     </body>
