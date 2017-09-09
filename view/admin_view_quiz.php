@@ -6,7 +6,7 @@ $quiz = unserialize($_SESSION['quiz']);
 $totalNumQuestions = $quiz->numberOfQuestions;
 
 $questionList = $quiz->questionList; //put the questions in their own array variable
-$answerList = array_column($questionList, 'answers'); //gets the answers property array out of the question array
+
 ?> 
 
 <!DOCTYPE html>
@@ -50,8 +50,8 @@ editing the quiz
                                     </tr>   
                                    
                                     <?php for ($y = 0; $y < count($questionList[$x]->answers); $y++) : ?>
-                                        <!--print_r ($questionList[0]->answers[0]->answerText);-->
-                                        <?php if ($questionList[$x]->answers[$y]->isCorrect === 1): ?>
+                                       <?php $answerValue = $questionList[$x]->answers[$y]->isCorrect;    
+                                             if($answerValue == 1) :?>
                                             <tr>
                                                 <td class="col-sm-4"><label>Correct Answer:</label></td>
                                                 <td><span value=""><?php echo $questionList[$x]->answers[$y]->answerText ?></span></td>

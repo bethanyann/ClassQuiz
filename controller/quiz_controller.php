@@ -1,30 +1,26 @@
 <?php
 // *****QUIZ CREATION CONTROLLER *****
+//start session
 $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
 session_set_cookie_params($lifetime, '/');
 session_start();
-
+//include required classes
 require_once('../database.php'); 
 include '../classes/Quiz.php';
 include '../classes/Question.php';
 include '../classes/Answer.php';
-
-
+//get the action from the POST/GET
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {
     $action = filter_input(INPUT_GET, 'action');
         if ($action === NULL) {
-        $action = 'createNewQuiz';
-        
+        $action = 'createNewQuiz';       
     }
 }
 
-//global quiz variable once a quiz is created;
-
-
 switch ($action){
-    case 'createNewQuiz': // this action is coming in from the admin_quiz_list page 
-                          //after an admin says they wanna create a new quiz
+   
+    case 'createNewQuiz': //coming in from the admin_quiz_list page if a new quiz is created               
         //get the course information out of the session -working
         $courseName = $_SESSION['courseName'];
         $courseID = $_SESSION['courseID'];
@@ -36,14 +32,13 @@ switch ($action){
         $numQuestions = htmlspecialchars($numberQuestions);
         
         //make a new quiz object
-        $quiz = new Quiz();  //figure out a better way to do a global quiz 
+        $quiz = new Quiz();  
         $quiz->numberOfQuestions = $numQuestions;
         $quiz->quizChapterNumber = $chapterNum;
         $quiz->courseID = $courseID;
         
+        //store quiz in SESSION until quiz is ready to be saved
         $_SESSION['quiz'] = serialize($quiz);
-        //store the new quiz in a global variable to keep it until the quiz is ready to be saved
-        //--working? 
       
         //store the question numbers in the session        
         $_SESSION['numQuestions'] = $numQuestions;
@@ -119,20 +114,21 @@ switch ($action){
             }
                 //make question object
                 $question = new Question();
-                $question->answers = $answers;//add the answers to the question object's array
+                //add the answers to the question object's array
+                $question->answers = $answers;
                 $question->questionText = $questionText;
                 $question->questionType = $questionType;
                 $question->correctAnswerPageNumber = $pageNumber; 
                 //add the question to the Quiz 
                 $quiz->questionList[] = $question;
-                
                 //if everything was successful, increment question counter by 1
                 $questionCounter++;
                 
                 if($questionCounter <= $totalNumQuestions)
-                {
-                    $_SESSION['questionCounter'] = $questionCounter; //increment the counter
-                    $_SESSION['quiz'] = serialize($quiz); //add new quiz back to the session
+                {   //increment the counter
+                    $_SESSION['questionCounter'] = $questionCounter; 
+                    //add new quiz back to the session
+                    $_SESSION['quiz'] = serialize($quiz); 
                     //go back to the view and enter in another question
                     include '../view/admin_create_quiz.php';
                     break;
@@ -140,27 +136,29 @@ switch ($action){
                 else
                 {
                     $_SESSION['quiz'] = serialize($quiz);
+                    //direct user to the confirmation page for the quiz
                     include '../view/admin_save_new_quiz.php';
                     //be sure to set a question limit to 20 questions per quiz! 
                 }
         } 
         else //if the quiz is not set yet
         {
-            //this doesn't work because it doesn't sent the list of quizzes back...
+            //this doesn't work yet because it doesn't send the list of quizzes back
             $_SESSION['quiz'] = serialize($quiz);
             include '../view/admin_quiz_list.php';
         } 
         break;
-    case 'saveQuiz' : //permanently saves the quiz, questions and answers
+    case 'saveQuiz' : //permanently saves the quiz, questions and answers to the DB
         $quiz = unserialize($_SESSION['quiz']);
         //need to make sure a quiz doesn't already exist for that chapter BEFORE saving quiz to avoid duplicates
-        //could I figure out ajax for this???? 
+        //could I figure out ajax for this? 
+        
+        //save quiz to the database
         $results = SaveQuiz($quiz);
         if($results)
-        {   //if the quiz successfully saved
-            //get the new list of quizzes 
+        {   //if the quiz successfully saved, get the new list of quizzes
             $listOfQuizzes = GetCourseQuizzes($quiz->courseID);
-            include'../view/admin_quiz_list.php'; //kinda want to rename this page
+            include'../view/admin_quiz_list.php';
         }
         else
         {
@@ -168,8 +166,8 @@ switch ($action){
         }
         break;
     case 'viewQuiz' : 
-        //this will just go to the database and display the quiz like the quiz conformation page
-         //make sure this is getting the right courseID #
+        //this will just go to the database and display the quiz like the quiz confirmation page
+        //make sure this is getting the right quiz ID
         $qID = filter_input(INPUT_POST, 'quizID');
         $quizID = htmlspecialchars($qID);
         
@@ -179,15 +177,12 @@ switch ($action){
         $nQues = filter_input(INPUT_POST, 'numQuestions');
         $numQuestions = htmlspecialchars($nQues);
         //now take the quizID and get the quiz object from the database
-        //this might be hard
-        
         //make a new quiz object
         $quiz = new Quiz();
         $quiz->quizID = $quizID;
         $quiz->quizChapterNumber = $chapterNumber;
         $quiz->numberOfQuestions = $numQuestions;
         //go get the questions and answers
-        
         $quiz->questionList = GetQuizByQuizID($quiz);
         //put the quiz into the session
         $_SESSION['quiz'] = serialize($quiz);

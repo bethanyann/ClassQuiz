@@ -1,6 +1,6 @@
 <?php
-/* Program 3 */
-/*CONTROLLER - will contain the login stuff as well as adding data to a user's profile page*/
+/* Class Quiz */
+/*CONTROLLER - will contain the login stuff */
 $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
 session_set_cookie_params($lifetime, '/');
 session_start();
