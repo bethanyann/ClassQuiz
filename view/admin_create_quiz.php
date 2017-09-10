@@ -45,7 +45,7 @@ $questionCounter = $_SESSION['questionCounter'];
                             <table class="table table-responsive">
                                 <tr>
                                     <td class="col-sm-4"><label>Question:</label></td>
-                                    <td><input type="text" name="question" class="form-control"></td>
+                                    <td><input type="text" name="question_mc" class="form-control"></td>
                                 </tr>
                                 <tr>
                                     <td class="col-sm-4"><label>Correct Answer:</label></td>
@@ -65,7 +65,7 @@ $questionCounter = $_SESSION['questionCounter'];
                                 </tr>
                                 <tr>
                                     <td class="col-sm-4"><label>Where in the book can the correct answer be found?</label></td>
-                                    <td><input type="text" name="page_number" class="form-control"></td>
+                                    <td><input type="text" name="page_number_mc" class="form-control"></td>
                                 </tr>
                                 <tr>
                                     <td class="col-sm-4"></td>
@@ -80,8 +80,8 @@ $questionCounter = $_SESSION['questionCounter'];
                                     <td><input type="text" name="question" class="form-control"></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-sm-4"><label>Correct Answer:</label>
-                                     <input type="radio" id="toggle" name="true_false_correct_answer" value="true" style="margin-right:6px;"/><label style="padding-right:20px;">True</label>
+                                    <td class="col-sm-4"><label>Correct Answer:</label></td>
+                                    <td> <input type="radio" id="toggle" name="true_false_correct_answer" value="true" style="margin-right:6px;"/><label style="padding-right:20px;">True</label>
                                      <input type="radio" id="toggle" name="true_false_correct_answer" value="false" style="margin-right:6px;"/><label style="padding-right:20px;">False</label>   </td>                
                                 </tr>
                                 <tr>                       
@@ -92,9 +92,7 @@ $questionCounter = $_SESSION['questionCounter'];
                                     <td class="col-sm-4"></td>
                                     <td><button type="submit" class="btn btn-primary" name="action" value="saveQuestion">Save Question &raquo;</button><td>
                                 </tr>
-                            </table>
-                            
-                            
+                            </table>                             
                         </div>
                         <div class="row" id="fillblank" style="margin-left:20px; display:none;">
                             fill in the blank question here

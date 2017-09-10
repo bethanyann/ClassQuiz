@@ -41,25 +41,29 @@ and confirm that it's what they want to save. Implement the ability to edit the 
                         <form class="form-group" action="quiz_controller.php" method="POST">
                             <?php for ($x = 0; $x < $totalNumQuestions; $x++) : ?>                      
                                 <table class="table table-responsive">
-                                    <tr>
-                                        <td class="col-sm-4"><label>Question # <?php echo ($x + 1) ?>:</label></td>
+                                    <tr style="border-bottom: #ccccff 5px solid;background-color:#eeeeff;">
+                                        <td class="col-sm-4"><label class="pull-right">Question # <?php echo ($x + 1) ?>:</label></td>
                                         <td><span value=""><?php echo $questionList[$x]->questionText ?></span></td>
                                     </tr>   
                                     <!--$answerList = $question->answers; -->
-                                    <?php for ($y = 0; $y < count($question->answers); $y++) : ?>
-                                        <!--print_r ($questionList[0]->answers[0]->answerText);-->
-                                        <?php if ($answers[$y]->isCorrect === 1): ?>
+                                    <?php for ($y = 0; $y < count($questionList[$x]->answers); $y++) : ?>
+                                       <?php $answerValue = $questionList[$x]->answers[$y]->isCorrect;    
+                                             if($answerValue == 1) :?>
                                             <tr>
-                                                <td class="col-sm-4"><label>Correct Answer:</label></td>
-                                                <td><span value=""><?php echo $answers[$y]->answerText ?></span></td>
+                                                <td class="col-sm-4"><label class="pull-right">Correct Answer:</label></td>
+                                                <td><span value=""><?php echo $questionList[$x]->answers[$y]->answerText ?></span></td>
                                             </tr>
                                         <?php else: ?>
                                             <tr>
-                                                <td class="col-sm-4"><label>Incorrect Answer #<?php echo($y + 1) ?>: </label></td>
-                                                <td><span value=""><?php echo $answers[$y]->answerText ?></span></td>
+                                                <td class="col-sm-4"><label class="pull-right">Incorrect Answer #<?php echo($y + 1) ?>: </label></td>
+                                                <td><span value=""><?php echo $questionList[$x]->answers[$y]->answerText ?></span></td>
                                             </tr>
                                         <?php endif; ?>                             
                                     <?php endfor; ?>
+                                    <tr>
+                                         <td class="col-sm-4"><label class="pull-right">Correct Answer Page Number:</label></td>
+                                         <td><span value=""><?php echo $questionList[$x]->correctAnswerPageNumber ?></span></td>      
+                                    </tr>
                                 </table>   
                             <?php endfor; ?>
                             <div class="row text-center">

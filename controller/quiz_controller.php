@@ -56,18 +56,18 @@ switch ($action){
             $totalNumQuestions = $_SESSION['numQuestions'];
             $questionCounter = $_SESSION['questionCounter'];       
             //get question type
-            $qt = $_POST['questionType'];     
+            $qt = filter_var($_POST['questionType']);     //filter this?
             $questionType = htmlspecialchars($qt);
-            //get question text
-            $qtext = filter_input(INPUT_POST, 'question'); 
-            $questionText = htmlspecialchars($qtext);       
-            //get the correct answer page number
-            $pn = filter_input(INPUT_POST, 'page_number');
-            $pageNumber = htmlspecialchars($pn);
-                       
+                     
             //now based on question type, grab the answers and put them in the question's answer array
             if($questionType === "multiple_choice") 
             {   
+                //get question text
+                $qtext = filter_input(INPUT_POST, 'question_mc'); 
+                $questionText = htmlspecialchars($qtext);       
+                //get the correct answer page number
+                $pn = filter_input(INPUT_POST, 'page_number_mc');
+                $pageNumber = htmlspecialchars($pn);
                 //make a new array 
                 $answers = array();
                 //there will be 1 correct answer
@@ -77,7 +77,8 @@ switch ($action){
                 $c_answer->isCorrect = 1;
                 $c_answer->answerText = $correctAnswer;
                 $answers[] = $c_answer;
-             
+                $c_answer = null;
+                
                 //and 3 incorrect answers
                 $ia1 = filter_input(INPUT_POST, 'incorrect_answer1');
                 $incorrectAnswer1 = htmlspecialchars($ia1);
@@ -85,6 +86,7 @@ switch ($action){
                 $i1_answer->isCorrect = 0;
                 $i1_answer->answerText = $incorrectAnswer1;
                 $answers[] = $i1_answer;
+                $i1_answer = null;
                 
                 $ia2 = filter_input(INPUT_POST, 'incorrect_answer2');
                 $incorrectAnswer2 = htmlspecialchars($ia2);
@@ -92,6 +94,7 @@ switch ($action){
                 $i2_answer->isCorrect = 0;
                 $i2_answer->answerText = $incorrectAnswer2;
                 $answers[] = $i2_answer;
+                $i2_answer = null;
                 
                 $ia3 = filter_input(INPUT_POST, 'incorrect_answer3');
                 $incorrectAnswer3 = htmlspecialchars($ia3);
@@ -99,9 +102,17 @@ switch ($action){
                 $i3_answer->isCorrect = 0;
                 $i3_answer->answerText = $incorrectAnswer3;
                 $answers[] = $i3_answer;
+                $i3_answer = null;
             }
             else if($questionType === "true_false")
             {
+                //get question text
+                $qtext = filter_var($_POST['question']); 
+                $questionText = htmlspecialchars($qtext);       
+                //get the correct answer page number
+                $pn = filter_var($_POST['page_number']);
+                $pageNumber = htmlspecialchars($pn);
+                
                 $answers = array();
                  
                 $tf = $_POST['true_false_correct_answer'];     
@@ -121,6 +132,9 @@ switch ($action){
                 $question->correctAnswerPageNumber = $pageNumber; 
                 //add the question to the Quiz 
                 $quiz->questionList[] = $question;
+                
+                $question = null;
+                $answers = null;
                 //if everything was successful, increment question counter by 1
                 $questionCounter++;
                 

@@ -30,8 +30,8 @@ switch($action){
         include '../view/admin_dashboard.php';
         break;
     case 'viewQuizzes':        
-        $courseName = $_REQUEST['courseName'];  //figure out a different way to do this later
-        $courseID = $_REQUEST['courseID']; //figure out a different way to do this later
+        $courseName = filter_var($_REQUEST['courseName']);  //figure out a different way to do this later
+        $courseID = filter_var($_REQUEST['courseID']); //figure out a different way to do this later
         //when admin selects a specfic class, this will pull up all associated quizzes
         
         $listOfQuizzes = GetCourseQuizzes($courseID);

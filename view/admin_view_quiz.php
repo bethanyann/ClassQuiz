@@ -33,7 +33,7 @@ editing the quiz
                 <?php include '../shared/admin_navigation.php'; ?>
                 <div class="col-sm-7">
                     <!--content goes here -->                         
-                    <div class="col-sm-11"  > 
+                    <div class="col-sm-11"  style="padding:0px;"> 
                         <h3 class="text-center" style="padding-bottom:15px;">Quiz for <?php echo $_SESSION['courseName'] ?></h3>
                         <h4 class="text-center">Chapter <?php echo $quiz->quizChapterNumber ?></h4>
                         <h4 class="text-center">Total number of quiz questions: <?php echo $totalNumQuestions?></h4>
@@ -44,8 +44,8 @@ editing the quiz
                             </div>
                             <?php for ($x = 0; $x < $totalNumQuestions; $x++) : ?>                      
                                 <table class="table table-responsive">
-                                    <tr>
-                                        <td class="col-sm-4"><label>Question # <?php echo ($x + 1) ?>:</label></td>
+                                    <tr style="border-bottom: #ccccff 5px solid;background-color:#eeeeff;">
+                                        <td class="col-sm-4"><label class="pull-right">Question # <?php echo ($x + 1) ?>:</label></td>
                                         <td><span value=""><?php echo $questionList[$x]->questionText ?></span></td>
                                     </tr>   
                                    
@@ -53,16 +53,20 @@ editing the quiz
                                        <?php $answerValue = $questionList[$x]->answers[$y]->isCorrect;    
                                              if($answerValue == 1) :?>
                                             <tr>
-                                                <td class="col-sm-4"><label>Correct Answer:</label></td>
+                                                <td class="col-sm-4"><label class="pull-right">Correct Answer:</label></td>
                                                 <td><span value=""><?php echo $questionList[$x]->answers[$y]->answerText ?></span></td>
                                             </tr>
                                         <?php else: ?>
                                             <tr>
-                                                <td class="col-sm-4"><label>Incorrect Answer #<?php echo($y + 1) ?>: </label></td>
+                                                <td class="col-sm-4"><label class="pull-right">Incorrect Answer #<?php echo($y) ?>: </label></td>
                                                 <td><span value=""><?php echo $questionList[$x]->answers[$y]->answerText ?></span></td>
                                             </tr>
                                         <?php endif; ?>                             
                                     <?php endfor; ?>
+                                    <tr>
+                                        <td class="col-sm-4"><label class="pull-right">Correct Answer Page #:</label></td>
+                                        <td><span value=""><?php echo $questionList[$x]->correctAnswerPageNumber ?></span></td>    
+                                    </tr>
                                 </table>   
                             <?php endfor; ?>   
                         </form>

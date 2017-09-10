@@ -15,52 +15,64 @@ $courseID = $_SESSION['courseID'];
  
 
 <script>
-
+    //ajax function to make sure the chapter does not exist for the course already
     function validateChapter(chNum,courseID) {
-    if (chNum === "" || isNaN(chNum)) {
-        document.getElementById("chapterError").innerHTML = "Please enter a valid Chapter Number";
-        document.getElementById("quiz_chapter_num").innerHTML = "";
-        return;
-    } 
-    else
-    { 
-        var ajaxRequest;
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            ajaxRequest = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
-        }  
-        //function that will receive data sent from the server and will update error message				
-        ajaxRequest.onload = function(){
-           if(ajaxRequest.readyState === 4 && ajaxRequest.status === 200)
-           {
-                var result = ajaxRequest.responseText;
-                if(result === "true")
+        if (chNum === "" || isNaN(chNum)) {
+            document.getElementById("chapterError").innerHTML = "Please enter a valid Chapter Number";
+            document.getElementById("quiz_chapter_num").innerHTML = "";
+            return;
+        } 
+        else
+        { 
+            var ajaxRequest;
+            if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                ajaxRequest = new XMLHttpRequest();
+            } 
+            else {
+                // code for IE6, IE5
+                ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+            } 
+            
+           //function that will receive data sent from the server and will update error message				
+           ajaxRequest.onload = function(){
+                if(ajaxRequest.readyState === 4 && ajaxRequest.status === 200)
                 {
-                    //if result is true that means the chapter exists in the database already and 
-                    //it shouldn't be saved
-                   document.getElementById("chapterError").innerHTML = "A quiz for Chapter " + chNum + " exists already. Please select a different chapter"; 
-                   var button = document.getElementById("new_quiz_button");
-                   button.disabled = true;
+                    var result = ajaxRequest.responseText;
+                    if(result === "true")
+                    {
+                        //if result is true that means the chapter exists in the database already and 
+                        //it shouldn't be saved
+                        document.getElementById("chapterError").innerHTML = "A quiz for Chapter " + chNum + " exists already. Please select a different chapter"; 
+                        var button = document.getElementById("new_quiz_button");
+                        button.disabled = true;
+                    }
+                    else
+                    {
+                        document.getElementById("chapterError").innerHTML = "*";
+                        var button = document.getElementById("new_quiz_button");
+                        button.disabled = false;
+                    }
                 }
-                else
-                {
-                   document.getElementById("chapterError").innerHTML = "*";
-                   var button = document.getElementById("new_quiz_button");
-                   button.disabled = false;
+                else { //put something here if the ajax response doesn't work
                 }
-           }
-        };
+            };
         
-        var queryString = "?n=" + chNum + "&c=" + courseID;
-        ajaxRequest.open("GET","../ajax_validation.php"+queryString,true);
-        ajaxRequest.send();          
-    }
+            var queryString = "?n=" + chNum + "&c=" + courseID;
+            ajaxRequest.open("GET","../ajax_validation.php"+queryString,true);
+            ajaxRequest.send();          
+        }
+    };
+    //validation for the number of quiz questions (is a number, is not zero, is not greater than 20)
     function validateNumQuestions(numQ)
     {
-        if(numQ < 0 || numQ > 20)
+        if(numQ === "" || isNaN(numQ))
+        {
+             document.getElementById("numQuestionError").innerHTML = "Please enter a valid number";
+             var button = document.getElementById("new_quiz_button");
+                   button.disabled = true;
+        }
+        else if(numQ < 0 || numQ > 20)
         {
             document.getElementById("numQuestionError").innerHTML = "Limit of 20 questions per quiz"; 
             var button = document.getElementById("new_quiz_button");
@@ -72,8 +84,8 @@ $courseID = $_SESSION['courseID'];
             var button = document.getElementById("new_quiz_button");
                    button.disabled = false;
         }
-    }
-}
+    };
+  
 </script>
 <head>
     <meta charset="utf-8">
@@ -104,12 +116,12 @@ $courseID = $_SESSION['courseID'];
                             <tr class="form-group">
                                 <td class="col-sm-4 text-left"><label for="numQuestions">Number of questions on the quiz: </label></td>
                                 <td class="col-sm-1 text-right"><input class="form-control" type="text"  name="numQuestions" id="num_questions" onkeyup="validateNumQuestions(this.value)" style="width:150px;" required></td>
-                                <td><span class="error" id="numQuestionError">*</span></td>
+                                <td><span class="error text-danger" id="numQuestionError">*</span></td>
                             </tr>
                             <tr class="form-group ">
                                 <td class="col-sm-4 text-left"><label for="chapterNum">Quiz Chapter Number: </label></td>          
                                 <td class="col-sm-1 text-right"><input class="form-control" type="text" name="chapterNum" id="quiz_chapter_num" onkeyup="validateChapter(this.value,<?php echo $courseID ?>)" style="width:150px;" required></td>
-                                <td><span class="error" id="chapterError">*</span></td>
+                                <td><span class="error text-danger" id="chapterError">*</span></td>
                             </tr>
                             <tr class="form-group">
                                 <td><input type="hidden" name="action" value="createNewQuiz"</td>
@@ -126,10 +138,10 @@ $courseID = $_SESSION['courseID'];
                     <h2 class="text-center"> <?php echo $_SESSION['courseName'] ?></h2>
                     <h3>Existing Quizzes : </h3>
                     <form action="quiz_controller.php" method="POST">
-                        <table class="table table-responsive">    
-                            <?php foreach ($listOfQuizzes as $quiz) : ?>                       
-                                <tr class="table-hover"> 
-                                    <td>
+                        <table class="table table-responsive">   
+                          <tr class="table-hover">
+                            <?php foreach ($listOfQuizzes as $quiz) : ?>                                                     
+                                    <td class="col-sm-1" style="display:inline;">
                                         <button type="submit" class="btn btn-primary"  name="action" value="viewQuiz">
                                             <h5>Chapter <?php echo htmlspecialchars($quiz['quizChapterNum']) ?> Quiz</h5> 
                                             <h5>- - - - - -</h5>
@@ -139,8 +151,8 @@ $courseID = $_SESSION['courseID'];
                                             <input type="hidden" name="quizID" value="<?php echo $quiz['quizID'] ?>">
                                         </button>
                                     </td>      
-                                </tr>
-                            <?php endforeach; ?>
+                             <?php endforeach; ?>
+                          </tr>    
                         </table>
                     </form>
                 </div> 
@@ -150,14 +162,14 @@ $courseID = $_SESSION['courseID'];
                     <form class="form-group" action="quiz_controller.php" method="POST"> <!--building a new quiz directs to the quiz controller-->
                         <table class="table table-responsive ">
                             <tr class="form-group">
-                                <td class="col-sm-4 text-left"><label for="numQuestions">Number of questions on the quiz: </label></td>
-                                <td class="col-sm-1 text-right"><input class="form-control" type="text"  name="numQuestions" style="width:150px;" required></td>
-                                <td><span class="error" id="numQuestionError">*</span></td>
+                                <td class="col-sm-4 text-left align-middle"><label for="numQuestions">Number of questions on the quiz: </label></td>
+                                <td class="col-sm-1 text-right"><input class="form-control" type="text"  name="numQuestions" id="num_questions" onkeyup="validateNumQuestions(this.value)" style="width:150px;" required></td>
+                                <td><h4 class="error text-danger align-middle" id="numQuestionError">*</h4></td>
                             </tr>
                             <tr class="form-group ">
-                                <td class="col-sm-4 text-left"><label for="chapterNum">Quiz Chapter Number: </label></td>          
+                                <td class="col-sm-4 text-left align-middle"><label for="chapterNum">Quiz Chapter Number: </label></td>          
                                 <td class="col-sm-1 text-right"><input class="form-control" type="text" name="chapterNum" id="quiz_chapter_num" onkeyup="validateChapter(this.value,<?php echo $courseID ?>)" style="width:150px;" required></td>
-                                <td><span class="error" id="chapterError" >*</span></td>
+                                <td><h4 class="error text-danger align-middle" id="chapterError" >*</h4></td>
                             </tr>
                             <tr class="form-group">
                                 <td><input type="hidden" name="action" value="createNewQuiz"</td>
