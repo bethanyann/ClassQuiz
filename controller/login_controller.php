@@ -8,10 +8,11 @@ if(!isset($_SESSION)){session_start();}
 //including a new database file for just login stuff
 require_once('../database_user.php');
 require_once('../classes/ValidationClass.php');
+include_once '../shared/navigation.php';
 //instantiate validation class 
 $validate = new ValidationClass();
 
-if(!isset($_SESSION['userNameLoggedIn'])){  $loggedInStatus = 0; }
+if(!isset($_SESSION['usernameLoggedIn'])){  $loggedInStatus = 0; }
 else{  $loggedInStatus = 1; }
 
 $action = filter_input(INPUT_POST, 'action');
@@ -53,7 +54,7 @@ switch($action){
                 $error_message = "Your password is incorrect";
                 $_SESSION['username'] = $admin[0]['adminUsername'];
                 
-                $_SESSION['usernameLoggedIn'] = null;
+                $_SESSION['usernameLoggedIn'] = 0;
                 include'../view/login.php';
             }  
         }

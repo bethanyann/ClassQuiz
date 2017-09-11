@@ -1,5 +1,5 @@
 <?php
-
+include '../ClassQuiz/shared/navigation.php';
 // *****QUIZ CREATION CONTROLLER *****
 //start session
 $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds

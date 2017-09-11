@@ -1,15 +1,10 @@
 <?php
 //get username from session if there was an error
-$username = $_SESSION['username'];
-if (!isset($username)) {
-    $username = '';
+if (session_status() == PHP_SESSION_NONE) {}
+else{
+    $username = $_SESSION['username'];
 }
-
-if (!isset($error_message)) {
-    $error_message = '';
-    $username = '';
-}
-//if(!isset($_SESSION)) { session_start(); }     
+    
 ?>
 <!DOCTYPE html>
 <head>
@@ -30,18 +25,18 @@ if (!isset($error_message)) {
         <div class="row">     
             <h2 class="text-center">Log In to your Account</h2>
             <div class="col-sm-6 col-sm-offset-3">
-                <form action="login_controller.php" method="POST">
+                <form action="../controller/login_controller.php" method="POST">
                     <table class="table table-responsive" id="login_table">
                         <tr>
                             <th><label>Username:</label></th>
-                            <td><input type="text" size="25" name="username" value="<?php echo $username; ?>"/></td>
+                            <td><input type="text" class="form-control" size="25" name="username" value="<?php if(isset($username)){echo $username;}?>"/></td>
                        </tr>
                         <tr>  
                             <th><label>Password:</label></th>
-                            <td><input type="password" size="25" name="password" value=""/></td>
+                            <td><input type="password" class="form-control" size="25" name="password" value=""/></td>
                         </tr>
                         <tr>
-                            <td><button type="submit" class="btn btn-primary btn-link" name="action" value="login_nav">Log In</button></td>
+                            <td><button type="submit" class="btn btn-primary" name="action" value="login_nav">Log In</button></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -49,7 +44,7 @@ if (!isset($error_message)) {
                         </tr>
                         <tr>
                             <td></td>
-                            <td><p>First time logging in? Click <a href="">here</a> to register a new account.</p> </td>
+                            <td><h4>First time logging in? Click <a href="">here</a> to register a new account.<h4> </td>
                         </tr>
                     </table> 
                 </form>        

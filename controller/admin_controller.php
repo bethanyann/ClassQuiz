@@ -8,6 +8,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 require_once('../database.php'); 
 include '../classes/Quiz.php';
+include_once '../shared/navigation.php';
 
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {
@@ -50,6 +51,11 @@ switch($action){
         break; 
     case 'manageStudents':
         //have this redirect to another controller
+        break;
+    case 'addCourse' :
+        $cname = filter_input(INPUT_POST,'courseName');
+        $cnum = filter_input(INPUT_POST, 'courseNumber');
+        
         break;
     default:
         break;

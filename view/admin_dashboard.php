@@ -1,15 +1,15 @@
 <?php
 $loggedInStatus = 0;
 //make sure admin is signed in
- $userType = $_SESSION['userType'];
-if($userType != 'admin') //this works!!!!!!
-{
-    header( "Location: ../home.php" ); die; //redirect user to home page if they are not admin
-} 
+$userType = $_SESSION['userType'];
+if ($userType != 'admin') { //this works!!!!!!
+    header("Location: ../home.php");
+    die; //redirect user to home page if they are not admin
+}
 //this forces user to go through the admin login page before they can view this page
-if(!$adminCourses) 
-{
-    header("Location: ../home.php"); die;
+if (!$adminCourses) {
+    header("Location: ../home.php");
+    die;
 }
 ?>
 <!DOCTYPE html>
@@ -27,7 +27,7 @@ if(!$adminCourses)
 </head>
 
 <body>
-    <?php include '../shared/navigation.php'; ?>
+
     <div class="container-fluid">
         <div class="row">
             <?php include '../shared/admin_navigation.php'; ?>
@@ -60,18 +60,39 @@ if(!$adminCourses)
                         </tr>
                     <?php endforeach; ?>
                 </table>
-
             </div>       
+            <div class="col-sm-5">
+                <h3>Add a new course</h3>
+                <form class="form-group" action="admin_controller.php" method="POST"> <!-- adding a new course to db-->
+                    <table class="table table-responsive ">
+                        <tr class="form-group">
+                            <td class="col-sm-4 text-left"><label for="">Course Name: </label></td>
+                            <td class="col-sm-1 text-right"><input class="form-control" type="text"  name="courseName" id="course_name" style="width:150px;" required></td>
+                            <td><span class="error text-danger" id="numQuestionError">*</span></td>
+                        </tr>
+                        <tr class="form-group ">
+                            <td class="col-sm-4 text-left"><label for="">Course Number: </label></td>          
+                            <td class="col-sm-1 text-right"><input class="form-control" type="text" name="courseNumber" id="course_num" style="width:150px;" required>
+                            <td><span class="error text-danger" id="chapterError" value="<?php if (isset($error_message)) { echo $error_message;  } ?>">*</span></td>
+                        </tr>
+                        <tr class="form-group">
+                            <td><input type="hidden" name="action" value="addCourse"</td>
+                            <td><button type="submit" class="btn btn-primary" name="action" value="addCourse">Add New Course &raquo;</button><td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
         </div>
-        <footer>
-            <p class="text-center">&copy; capstone project 2017</p>
-        </footer>
-    </div> <!-- /container -->    
+    </div>
+    <footer>
+        <p class="text-center">&copy; capstone project 2017</p>
+    </footer>
+</div> <!-- /container -->    
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.11.2.min.js"><\/script>');</script>
-    <script src="../scripts/vendor/bootstrap.min.js"></script>
-    <script src="../scripts/classquiz.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.11.2.min.js"><\/script>');</script>
+<script src="../scripts/vendor/bootstrap.min.js"></script>
+<script src="../scripts/classquiz.js"></script>
 
 </body>
 </html>
