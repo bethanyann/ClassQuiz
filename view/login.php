@@ -3,8 +3,7 @@
 if (session_status() == PHP_SESSION_NONE) {}
 else{
     $username = $_SESSION['username'];
-}
-    
+} 
 ?>
 <!DOCTYPE html>
 <head>
@@ -20,7 +19,7 @@ else{
 </head>
 
 <body>
-<?php include '../shared/navigation.php'; ?>
+<?php include'../shared/navigation.php'?>
     <div class="container-fluid">
         <div class="row">     
             <h2 class="text-center">Log In to your Account</h2>

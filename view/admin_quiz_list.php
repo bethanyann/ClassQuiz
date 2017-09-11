@@ -1,20 +1,15 @@
 <?php
-$loggedInStatus = 0;
-//make sure admin is signed in
-//$username = $_SESSION['username'];
-//if($username != 'admin') //this works!!!!!!
-//{
-//    header( "Location: home.php" ); die; //redirect user to home page if they are not admin
-//} 
-//get the admin account info
-//get admin list of courses
+$userType = $_SESSION['userType'];
+if ($userType != 'admin') { //this works!!!!!!
+    header("Location: ../home.php");
+    die; //redirect user to home page if they are not admin
+}
 if (!isSet($error_message) || $error_message === null) {
     $error_message = "";
 }
 $courseID = $_SESSION['courseID'];
 ?>
 <!DOCTYPE html>
-
 <!--AJAX SCRIPT for the validation -->
 <script>
     //ajax function to make sure the chapter does not exist for the course already

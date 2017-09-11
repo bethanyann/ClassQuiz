@@ -1,5 +1,4 @@
 <?php
-$loggedInStatus = 0;
 //make sure admin is signed in
 $userType = $_SESSION['userType'];
 if ($userType != 'admin') { //this works!!!!!!

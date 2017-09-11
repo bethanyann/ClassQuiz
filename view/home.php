@@ -17,16 +17,16 @@
 </head>
     
 <body>
+    <?php include 'shared/navigation_homepage.php'?>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
-      </div>
+    <div class="jumbotron" >       
+        <div class="container">
+           
+        </div>
+        <p> <br><br><br><br><br> </p>
     </div>
 
     <div class="container">
@@ -35,7 +35,7 @@
         <div class="col-md-4">
           <h2>Administrator Page</h2>
           <p> temp link to admin page - will take away once login is implemented.
-              <a class="btn btn-default" href="controller/admin_controller.php?action=login" role="button">Admin Page &raquo;</a></p>  
+             <!-- <a class="btn btn-default" href="controller/admin_controller.php?action=login" role="button">Admin Page &raquo;</a></p>  -->
         </div>
         <div class="col-md-4">
           <h2>Heading</h2>

@@ -1,3 +1,10 @@
+<?php 
+$userType = $_SESSION['userType'];
+if ($userType != 'admin') { //this works!!!!!!
+    header("Location: ../home.php");
+    die; //redirect user to home page if they are not admin
+}
+?>
 <!DOCTYPE html>
 <!--
 This will allow an admin to add students to a class

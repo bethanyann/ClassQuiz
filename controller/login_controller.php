@@ -8,7 +8,7 @@ if(!isset($_SESSION)){session_start();}
 //including a new database file for just login stuff
 require_once('../database_user.php');
 require_once('../classes/ValidationClass.php');
-include_once '../shared/navigation.php';
+//include_once '../shared/navigation.php';
 //instantiate validation class 
 $validate = new ValidationClass();
 
@@ -68,14 +68,14 @@ switch($action){
      case 'userIsLoggedIn':
        
         break;  
-    case 'login_page':
-        $loggedInStatus = 0;
-        include 'login.php';
-        break;
+//    case 'login_page':
+//        $loggedInStatus = 0;
+//        include 'login.php';
+//        break;
     case 'logout': //hopefully get this working? $login_status = 0; 
         session_destroy();
         $loggedInStatus = 0;
-        include 'login.php';
+        include '../index.php';
         break;
     case 'login': //coming from the login page
         //session_destroy();
@@ -136,7 +136,12 @@ switch($action){
        exit();
     }
     break;  
-  
+    case viewAdminAccount : 
+        
+        break;
+    case viewStudentAccount : 
+        
+        break;
    // case 'createAdmin' :
    //     $username = "admin";
    //    $password = 'admin';

@@ -1,9 +1,9 @@
 <?php
 
 // this is going to be a controller
-include 'database.php';
-include 'database_user.php';
-include '../ClassQuiz/shared/navigation.php';
+//include 'database.php';
+//include 'database_user.php';
+//include '../ClassQuiz/shared/navigation.php';
 session_start();
 session_destroy();
 
@@ -24,13 +24,15 @@ if (!isset($_SESSION['userNameLoggedIn'])) {
 
 switch ($action) {
     case 'login':
-        include'view/login.php';
+        header("Location: view/login.php");
         break;
-    case'logout':
-        include'controller/login_controller.php?action=logout';
-        break;
+    case'logout' :
+        $_SESSION['usernameLoggedIn']=NULL;
+        include 'view/home.php';
+        die();
     case 'none':
-        include 'home.php';
+        $_SESSION['usernameLoggedIn']=NULL;
+        include 'view/home.php';
         break;
 //    case 'admin':
 //        include 'admin_controller.php';

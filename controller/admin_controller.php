@@ -29,7 +29,8 @@ switch($action){
         $adminCourses = GetAdminCourses($adminID);        
         //go to admin page
         include '../view/admin_dashboard.php';
-        break;
+        die;
+        
     case 'adminDashboard' : 
         //if user logged in is an admin   
         $adminCourses = GetAdminCourses($adminID);

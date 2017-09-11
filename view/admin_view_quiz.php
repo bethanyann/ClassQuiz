@@ -1,12 +1,15 @@
 <?php
+$userType = $_SESSION['userType'];
+if ($userType != 'admin') { //this works!!!!!!
+    header("Location: ../home.php");
+    die; //redirect user to home page if they are not admin
+}
 //get the quiz out of the session
 $quiz = unserialize($_SESSION['quiz']);
-
 //use this as the limit for the loop
 $totalNumQuestions = $quiz->numberOfQuestions;
-
-$questionList = $quiz->questionList; //put the questions in their own array variable
-
+//put the questions in their own array variable
+$questionList = $quiz->questionList; 
 ?> 
 
 <!DOCTYPE html>

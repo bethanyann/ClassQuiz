@@ -1,11 +1,10 @@
 <?php
-$loggedInStatus = 0;
-//make sure admin is signed in
-//$username = $_SESSION['username'];
-//if($username != 'admin') //this works!!!!!!
-//{
-//    header( "Location: home.php" ); die; //redirect user to home page if they are not admin
-//} 
+$userType = $_SESSION['userType'];
+if ($userType != 'admin') { //this works!!!!!!
+    header("Location: ../home.php");
+    die; //redirect user to home page if they are not admin
+}
+
 //get the admin account info
 //get admin list of courses
 
