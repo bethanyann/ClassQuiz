@@ -1,16 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of user
- *
- * @author the hobbits
- */
 class User {
-    //put your code here
+    //can use the password field to allow user to change their password? 
+    private $userID;
+    public $username;
+    private $password;
+    public $userType; //will for sure use this, not sure if I will use any other fields
+    
+    function __construct() { }
 }

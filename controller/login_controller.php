@@ -3,63 +3,70 @@
 /*CONTROLLER - will contain the login stuff */
 $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
 session_set_cookie_params($lifetime, '/');
-session_start();
+if(!isset($_SESSION)){session_start();}
 
-require_once('database.php');
-require_once('ValidationClass.php');
+//including a new database file for just login stuff
+require_once('../database_user.php');
+require_once('../classes/ValidationClass.php');
 //instantiate validation class 
 $validate = new ValidationClass();
+
+if(!isset($_SESSION['userNameLoggedIn'])){  $loggedInStatus = 0; }
+else{  $loggedInStatus = 1; }
 
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {
     $action = filter_input(INPUT_GET, 'action');
         if ($action === NULL) {
-        $action = 'login';
+        $action = 'login_nav';
     }
 }
 
-switch($action){
-    case 'check_if_logged_in_profile':
-        if (!isset($_SESSION['userNameLoggedIn'])){
-           $loggedInStatus = 0;
-           $error_message = "You must be logged in to view your profile.";
-           include('login.php');
-           exit();
+switch($action){  
+    case 'login_nav':
+        //get username and password from the nav bar
+        $un = filter_input(INPUT_POST, "username");
+        $pw = filter_input(INPUT_POST, "password");
+        $username = htmlspecialchars($un);
+        $password = htmlspecialchars($pw);
+        
+        //ok now see if its an admin or a student
+        $isAdmin = checkUserType($username);
+        if($isAdmin) //if = true the user is an admin
+        {   //database call to get user's info
+            $admin = getUserInfo($username,$password);  
+            if($admin)
+            {
+                //if its admin, set $_SESSION['loggedInUser'] = admin; 
+                //redirect to admin dashboard
+                //set logged in status = 1;
+                $_SESSION['userType'] = $admin[0]['userType'];
+                $_SESSION['usernameLoggedIn'] = $admin[0]['adminUsername'];
+                $_SESSION['userID'] = $admin[0]['adminID'];
+             
+                $action = NULL;
+                include '../controller/admin_controller.php';
+                break;
+            }
+            else //the user info could not be retrieved
+            {
+                $error_message = "Your password is incorrect";
+                $_SESSION['username'] = $admin[0]['adminUsername'];
+                
+                $_SESSION['usernameLoggedIn'] = null;
+                include'../view/login.php';
+            }  
         }
-        else{
-            $loggedInStatus = 1;
-            //set user values from session 
-             $name = $_SESSION['userNameLoggedIn']['Name'];
-             $username = $_SESSION['userNameLoggedIn']['Username'];
-             $email = $_SESSION['userNameLoggedIn']['Email'];
-             $dateofbirth = $_SESSION['userNameLoggedIn']['DOB'];
-             //maybe make a call here to get height from the database and store in another session variable?
-            include('profile.php');
-            exit();
+        else
+        {
+            //user is a student, so do student things
         }
+        
+        
         break;
-    case 'userIsLoggedIn':
+     case 'userIsLoggedIn':
        
-        break;
-     case 'check_if_logged_in_index':
-        if (!isset($_SESSION['userNameLoggedIn'])){
-           $loggedInStatus = 0;
-           $error_message = "You must be logged in to view your profile.";
-           include('login.php');
-           exit();
-        }
-        else{
-            $loggedInStatus = 1;
-            //set user values from session 
-             $name = $_SESSION['userNameLoggedIn']['Name'];
-             $username = $_SESSION['userNameLoggedIn']['Username'];
-             $email = $_SESSION['userNameLoggedIn']['Email'];
-             $dateofbirth = $_SESSION['userNameLoggedIn']['DOB'];
-             //maybe make a call here to get height from the database and store in another session variable?
-            include('profile.php');
-            exit();
-        }
-        break;
+        break;  
     case 'login_page':
         $loggedInStatus = 0;
         include 'login.php';
@@ -127,5 +134,15 @@ switch($action){
        include('login.php');
        exit();
     }
-    break;
+    break;  
+  
+   // case 'createAdmin' :
+   //     $username = "admin";
+   //    $password = 'admin';
+        
+   //    $hash = password_hash($password, PASSWORD_BCRYPT);
+   //     admin_insert($username, $hash);
+        
+   //     $yes = password_verify('admin',$hash);
+   //     break;
 }//end of switch

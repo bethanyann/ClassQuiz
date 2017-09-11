@@ -1,9 +1,12 @@
 <?php
 // this is going to be a controller
 include 'database.php';
+include 'database_user.php';
+include '../ClassQuiz/shared/navigation.php';
 session_start();
+session_destroy();
 
-$clicked_user = filter_input(INPUT_GET, 'user');
+
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {
     $action = filter_input(INPUT_GET, 'action');
@@ -19,9 +22,9 @@ switch ($action){
     case 'none':
         include 'home.php';
         break;
-    case 'admin':
-        include 'admin_controller.php';
-        break;
+//    case 'admin':
+//        include 'admin_controller.php';
+//        break;
     default:
         break;
 }

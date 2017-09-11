@@ -1,17 +1,15 @@
 <?php
 $loggedInStatus = 0;
 //make sure admin is signed in
-//$username = $_SESSION['username'];
-//if($username != 'admin') //this works!!!!!!
-//{
-//    header( "Location: home.php" ); die; //redirect user to home page if they are not admin
-//} 
-//get the admin account info
-
+ $userType = $_SESSION['userType'];
+if($userType != 'admin') //this works!!!!!!
+{
+    header( "Location: ../home.php" ); die; //redirect user to home page if they are not admin
+} 
 //this forces user to go through the admin login page before they can view this page
 if(!$adminCourses) 
 {
-    header("Location: home.php");
+    header("Location: ../home.php"); die;
 }
 ?>
 <!DOCTYPE html>
@@ -31,7 +29,6 @@ if(!$adminCourses)
 <body>
     <?php include '../shared/navigation.php'; ?>
     <div class="container-fluid">
-        <!-- Example row of columns -->
         <div class="row">
             <?php include '../shared/admin_navigation.php'; ?>
             <h2 class="text-center">Administrator Dashboard</h2>
@@ -40,8 +37,7 @@ if(!$adminCourses)
                 <table class="table table-responsive table-bordered">
                     <tr>
                         <th class="text-center">Course Number</th>
-                        <th class="text-center">Course Name</th>
-                        <th></th>
+                        <th class="text-center">Course Name</th>      
                     </tr>
                     <?php foreach ($adminCourses as $course) : ?>                       
                         <tr class="table-hover"> 

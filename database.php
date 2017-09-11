@@ -1,5 +1,4 @@
 <?php
-
 // ***** MODEL *****
 // 
 // LOCAL CONNECTION
@@ -45,8 +44,8 @@ function GetCourseQuizzes($courseID) {
 
     try {
         $query = 'SELECT quizID, quizChapterNum, quizNumQuestions ' .
-                 'FROM quiz ' .
-                 'WHERE courseID = :courseIDPlaceholder';
+                'FROM quiz ' .
+                'WHERE courseID = :courseIDPlaceholder';
         $statement = $db->prepare($query);
         $statement->bindValue(':courseIDPlaceholder', $courseID);
         $statement->execute();
@@ -58,23 +57,22 @@ function GetCourseQuizzes($courseID) {
     }
     return $results;
 }
+
 //this function gets a selected quiz, questions, and answers by quizID #
-function GetQuizByQuizID($quiz)
-{
+function GetQuizByQuizID($quiz) {
     global $db;
-   
+
     try {
         $query = 'SELECT * FROM question ' .
-                 'WHERE quizID = :quizIDPlaceholder';
-        
+                'WHERE quizID = :quizIDPlaceholder';
+
         $statement = $db->prepare($query);
         $statement->bindValue(':quizIDPlaceholder', $quiz->quizID);
         $statement->execute();
 
         $results = $statement->fetchAll();
-        
-        foreach($results as $result)
-        {
+
+        foreach ($results as $result) {
             $question = new Question();
             $question->questionID = $result['questionID'];
             $question->questionType = $result['questionType'];
@@ -85,40 +83,38 @@ function GetQuizByQuizID($quiz)
         }
         //$questionList = $quiz->questionList;
         //ok now for each question we need to go and get the answers
-        foreach($quiz->questionList as $question)
-        {
-             try {
-                    $query = 'SELECT * FROM answer ' .
-                    'WHERE questionID = :questionIDPlaceholder';
-        
-                    $statement = $db->prepare($query);
-                    $statement->bindValue(':questionIDPlaceholder', $question->questionID);
-                    $statement->execute();
+        foreach ($quiz->questionList as $question) {
+            try {
+                $query = 'SELECT * FROM answer ' .
+                        'WHERE questionID = :questionIDPlaceholder';
 
-                    $answerResults = $statement->fetchAll();
-                    
-                    foreach($answerResults as $ar)
-                    {
-                        $answer = new Answer();
-                        
-                        $answer->answerID = $ar['answerID'];
-                        $answer->answerText = $ar['answerText'];
-                        $answer->isCorrect = $ar['isCorrect'];
-                        $answer->questionID = $ar['questionID'];
-                        //add the question to the quiz's array
-                        $question->answers[] = $answer;
-                    }
-                  }
-                  catch(Exception $ex){ }
+                $statement = $db->prepare($query);
+                $statement->bindValue(':questionIDPlaceholder', $question->questionID);
+                $statement->execute();
+
+                $answerResults = $statement->fetchAll();
+
+                foreach ($answerResults as $ar) {
+                    $answer = new Answer();
+
+                    $answer->answerID = $ar['answerID'];
+                    $answer->answerText = $ar['answerText'];
+                    $answer->isCorrect = $ar['isCorrect'];
+                    $answer->questionID = $ar['questionID'];
+                    //add the question to the quiz's array
+                    $question->answers[] = $answer;
+                }
+            } catch (Exception $ex) {
+                
+            }
         } //end FOREACH question loop
-         $questionList = $quiz->questionList;
-         $statement->closeCursor();
+        $questionList = $quiz->questionList;
+        $statement->closeCursor();
     }//end TRY 
-    catch(Exception $ex)
-    {
-       $results = false; 
+    catch (Exception $ex) {
+        $results = false;
     }
-    
+
     return $questionList; //might change this cuz technically I want to return the full quiz object
 }
 
@@ -153,7 +149,7 @@ function SaveQuiz($quiz) {
 function SaveQuestions($id, $quiz) {
     global $db;
     $results = false;
-    
+
     //starting the loop with the quiz's list of questions array
     $questionList = $quiz->questionList;
     foreach ($questionList as $question) {
@@ -163,7 +159,7 @@ function SaveQuestions($id, $quiz) {
                         VALUES
                         (:quizIDPlaceholder, :questionTypePlaceholder, :questionTextPlaceholder, :correctAnswerPlaceholder)';
             $statement = $db->prepare($query);
-            $statement->bindValue(':quizIDPlaceholder', $id); 
+            $statement->bindValue(':quizIDPlaceholder', $id);
             $statement->bindValue(':questionTypePlaceholder', $question->questionType);
             $statement->bindValue(':questionTextPlaceholder', $question->questionText);
             $statement->bindValue(':correctAnswerPlaceholder', $question->correctAnswerPageNumber);
@@ -172,7 +168,6 @@ function SaveQuestions($id, $quiz) {
             $question_id = $db->lastInsertId();
 
             foreach ($question->answers as $answer) {   //now insert the answers attached to each question
-               
                 try {
                     $query = 'INSERT INTO answer( questionID, answerText, isCorrect )
                         VALUES
@@ -183,9 +178,8 @@ function SaveQuestions($id, $quiz) {
                     $statement->bindValue(':isCorrectPlaceholder', $answer->isCorrect);
                     $success = $statement->execute();
                     $row_count = $statement->rowCount();
-                    
-                    if($success)
-                    {    
+
+                    if ($success && $row_count > 0) {
                         $results = true;
                     }
                 } catch (Exception $ex) {
@@ -197,14 +191,56 @@ function SaveQuestions($id, $quiz) {
         catch (Exception $ex) {
             print $ex;
             $results = false;
-        }  
+        }
     } //end of the FOREACH block for the questions
     return $results;
-}//END SAVE QUESTION
+}
 
-function DeleteQuiz($quizID)
-{
-    
+//END SAVE QUESTION
+
+function DeleteQuiz($quizID) {
     global $db;
     $results = false;
+
+    try {
+        $query = 'DELETE FROM quiz
+                    WHERE quizID = :quizIDPlaceholder';
+
+        $statement = $db->prepare($query);
+        $statement->bindValue(':quizIDPlaceholder', $quizID);
+        $success = $statement->execute();
+        $row_count = $statement->rowCount();
+
+        if ($success && $row_count > 0) {
+            $results = true;
+        }
+    } catch (Exception $ex) {
+        
+    }
+    return $results;
+}
+
+function ValidateQuizChapter($cID, $chNum) {
+    global $db;
+
+    try {
+        global $db;
+        $query = 'SELECT * FROM quiz WHERE quizChapterNum = :chNum AND courseID = :courseID';
+
+        $statement = $db->prepare($query);
+        $statement->bindValue(':chNum', $chNum);
+        $statement->bindValue(':courseID', $cID);
+        $statement->execute();
+
+        if (($row = $statement->fetch(PDO::FETCH_ASSOC)) > 0) {
+            $chapterExists = true;     
+        } else {
+            // no row returned
+            $chapterExists = false;
+        }
+        $statement->closeCursor();
+        return $chapterExists;
+    } catch (Exception $ex) {
+        echo $ex."That didn't work."; //echo the result back to the page
+    }
 }

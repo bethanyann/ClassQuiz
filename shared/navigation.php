@@ -29,16 +29,14 @@
                     </ul>
                 </li>
             </ul>
-            <form class="navbar-form navbar-right">
-                
+            <form class="navbar-form navbar-right" action="../ClassQuiz/controller/login_controller.php" method="POST">
                 <div class="form-group">
-                    <input type="text" placeholder="User ID" class="form-control" style="width:100px;">
+                    <input type="text" placeholder="User ID" name="username" class="form-control" style="width:100px;">
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Password" class="form-control">
+                    <input type="password" placeholder="Password" name="password" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-success">Sign in</button>
-            
+                    <button type="submit" class="btn btn-success" name="action" value="login_nav">Sign in</button> 
             </form>
 
         </div><!-- /.navbar-collapse -->

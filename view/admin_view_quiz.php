@@ -31,7 +31,7 @@ editing the quiz
             <!-- Example row of columns -->
             <div class="row">
                 <?php include '../shared/admin_navigation.php'; ?>
-                <div class="col-sm-7">
+                <div class="col-sm-8">
                     <!--content goes here -->                         
                     <div class="col-sm-11"  style="padding:0px;"> 
                         <h3 class="text-center" style="padding-bottom:15px;">Quiz for <?php echo $_SESSION['courseName'] ?></h3>

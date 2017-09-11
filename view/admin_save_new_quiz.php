@@ -32,7 +32,7 @@ and confirm that it's what they want to save. Implement the ability to edit the 
             <!-- Example row of columns -->
             <div class="row">
                 <?php include '../shared/admin_navigation.php'; ?>
-                <div class="col-sm-7">
+                <div class="col-sm-9">
                     <!--content goes here --> 
                     <h3 class="text-center" style="padding-bottom:15px;">Confirm new quiz for <?php echo $_SESSION['courseName'] ?></h3>
                     <h4 class="text-center">Quiz is for Chapter <?php echo $quiz->quizChapterNumber ?></h4>

@@ -29,9 +29,9 @@ $questionCounter = $_SESSION['questionCounter'];
         <?php include '../shared/navigation.php'; ?>
         <div class="container-fluid" style="min-height: 400px">
             <!-- Example row of columns -->
-            <div class="row">
-                <?php include '../shared/admin_navigation.php'; ?>
-                <div class="col-sm-7">
+            <div class="row"> 
+                 <?php include '../shared/admin_navigation.php'; ?>
+                <div class="col-sm-9">       
                     <h3 class="text-center"> Create a new quiz for <?php echo $_SESSION['courseName'] ?></h3>
                     <form class="form-group" action="quiz_controller.php" method="POST">     
                         <div class="row" style="margin-left:20px;">
