@@ -15,7 +15,7 @@ try {
     echo $error_message;
 }
 
-//This function gets the courses associated with the currently-logged-in administrator
+//This function gets the Courses associated with the currently-logged-in Administrator account
 function GetAdminCourses($adminID) {
     global $db;
 
@@ -58,7 +58,9 @@ function GetCourseQuizzes($courseID) {
     return $results;
 }
 
-//this function gets a selected quiz, questions, and answers by quizID #
+//This function gets a list of Students associated with a Course
+
+//This function gets a selected Quiz, Questions, and Answers by quizID #
 function GetQuizByQuizID($quiz) {
     global $db;
 
@@ -71,7 +73,7 @@ function GetQuizByQuizID($quiz) {
         $statement->execute();
 
         $results = $statement->fetchAll();
-
+        //get each question associated with a quiz
         foreach ($results as $result) {
             $question = new Question();
             $question->questionID = $result['questionID'];
@@ -81,8 +83,7 @@ function GetQuizByQuizID($quiz) {
             //add the question to the quiz's array
             $quiz->questionList[] = $question;
         }
-        //$questionList = $quiz->questionList;
-        //ok now for each question we need to go and get the answers
+        //for each question, get the associated answers
         foreach ($quiz->questionList as $question) {
             try {
                 $query = 'SELECT * FROM answer ' .
@@ -112,12 +113,13 @@ function GetQuizByQuizID($quiz) {
         $statement->closeCursor();
     }//end TRY 
     catch (Exception $ex) {
+        echo $ex;
         $results = false;
     }
 
     return $questionList; //might change this cuz technically I want to return the full quiz object
 }
-
+//Saves a quiz object to the database
 function SaveQuiz($quiz) {
     global $db;
     $results = false;
@@ -145,7 +147,7 @@ function SaveQuiz($quiz) {
     }
     return $results;
 }
-
+//Saves all the Questions and their Answers associated with one Quiz to the database
 function SaveQuestions($id, $quiz) {
     global $db;
     $results = false;
@@ -194,10 +196,9 @@ function SaveQuestions($id, $quiz) {
         }
     } //end of the FOREACH block for the questions
     return $results;
-}
+}//END SAVE QUESTION
 
-//END SAVE QUESTION
-
+//DELETE QUIZ
 function DeleteQuiz($quizID) {
     global $db;
     $results = false;
@@ -220,11 +221,11 @@ function DeleteQuiz($quizID) {
     return $results;
 }
 
+//MAKES SURE THE CHAPTER NUMBER DOES NOT EXIST ALREADY
 function ValidateQuizChapter($cID, $chNum) {
     global $db;
 
-    try {
-        global $db;
+    try {      
         $query = 'SELECT * FROM quiz WHERE quizChapterNum = :chNum AND courseID = :courseID';
 
         $statement = $db->prepare($query);
@@ -243,4 +244,68 @@ function ValidateQuizChapter($cID, $chNum) {
     } catch (Exception $ex) {
         echo $ex."That didn't work."; //echo the result back to the page
     }
+}
+//ADDS A NEW COURSE TO THE DATABASE
+function AddNewCourse($courseName,$courseID,$adminID)
+{
+    global $db;
+    try{ 
+        $query = 'INSERT INTO course (courseID, courseName)
+                  VALUES (:courseID, :courseName)';
+            $statement = $db->prepare($query);
+            $statement->bindValue(':courseID', $courseID);
+            $statement->bindValue(':courseName', $courseName);
+            $success = $statement->execute();
+            
+            if($success)
+            {
+                $query = 'INSERT INTO admin_courses(courseID, adminID)
+                  VALUES (:courseID, :adminID)';
+                $statement = $db->prepare($query);
+                $statement->bindValue(':courseID', $courseID);
+                $statement->bindValue(':adminID', $adminID);
+                $success = $statement->execute();
+            }
+            else
+            {
+                $success = false;
+            }
+            
+        return $success;
+    } catch (Exception $ex) {
+        echo $ex;
+    }
+}
+//DELETES A COURSE AND IT'S ASSOCIATION TO AN ADMIN ACCOUNT
+function DeleteCourse($courseID,$adminID)
+{
+    global$db;
+    
+    try{
+        $query = 'DELETE FROM course WHERE courseID = :courseIDPlaceholder';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':courseIDPlaceholder', $courseID);   
+        $success = $statement->execute();
+        
+        if($success)
+        {
+            try{
+                $query = 'DELETE FROM admin_courses WHERE courseID = :courseIDPlaceholder AND adminID = :adminIDPlaceholder';
+                $statement = $db->prepare($query);
+                $statement->bindValue(':courseIDPlaceholder', $courseID); 
+                $statement->bindValue(':adminIDPlaceholder', $adminID); 
+                $success = $statement->execute();
+
+            } catch (Exception $ex) {
+                echo $ex;
+                $success=false;
+            }
+            
+            
+        }
+    } catch (Exception $ex) {
+        echo $ex;
+        $success = false;
+    }
+    return $success;
 }

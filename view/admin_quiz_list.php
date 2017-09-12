@@ -1,7 +1,7 @@
 <?php
 $userType = $_SESSION['userType'];
 if ($userType != 'admin') { //this works!!!!!!
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     die; //redirect user to home page if they are not admin
 }
 if (!isSet($error_message) || $error_message === null) {
@@ -42,7 +42,7 @@ $courseID = $_SESSION['courseID'];
                         var button = document.getElementById("new_quiz_button");
                         button.disabled = true;
                     } else
-                    {
+                    {   //passed chapter validation, now check the num questions
                         document.getElementById("chapterError").innerHTML = "*";
                         var button = document.getElementById("new_quiz_button");
                         var questionNum = document.getElementById("num_questions").value;
@@ -51,6 +51,8 @@ $courseID = $_SESSION['courseID'];
                         {
                             if(questionNum > 20 || questionNum <= 0 || isNaN(questionNum))
                             { validateNumQuestions(questionNum); }
+                            else
+                            {   button.disabled = false;    }
                            
                         } else
                         {
@@ -113,11 +115,11 @@ $courseID = $_SESSION['courseID'];
 </head>
 
 <body height="100%">
-<?php include '../shared/navigation.php'; ?>
+  <?php  include'../shared/navigation.php'; ?>
     <div class="container-fluid" style="padding-left:0px; min-height: 400px"> 
-<?php include '../shared/admin_navigation.php'; ?>
+    <?php include '../shared/admin_navigation.php'; ?>
         <!-- IF THERE ARE NO QUIZZES FOR THE SPECFIC COURSE -->
-    <?php if (!$listOfQuizzes || $listOfQuizzes === null || count($listOfQuizzes) < 1): ?> 
+        <?php if (!$listOfQuizzes || $listOfQuizzes === null || count($listOfQuizzes) < 1): ?> 
             <div class="row">
                 <div class="col-sm-8">   <!--be sure to set a question limit to 20 questions per quiz-->
                     <h2> <?php echo $_SESSION['courseName'] ?></h2>

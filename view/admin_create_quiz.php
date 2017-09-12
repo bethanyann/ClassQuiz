@@ -1,7 +1,7 @@
 <?php
 $userType = $_SESSION['userType'];
 if ($userType != 'admin') { //this works!!!!!!
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     die; //redirect user to home page if they are not admin
 }
 

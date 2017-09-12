@@ -1,13 +1,8 @@
 <?php 
-if(isset($_SESSION['usernameLoggedIn']))
-{
-    $loggedInStatus = 1;
-}
-else {
-    $loggedInStatus = 0;
-}
-$userType = $_SESSION['userType'];
-
+if(isset($_SESSION['usernameLoggedIn'])){ $loggedInStatus = 1; }
+else { $loggedInStatus = 0; }
+if (session_status() == PHP_SESSION_NONE) {}
+else{$userType = $_SESSION['userType'];}
 ?>
 <nav class="navbar navbar-default" style="margin-bottom:0px;">
     <div class="container-fluid">
@@ -21,7 +16,6 @@ $userType = $_SESSION['userType'];
             </button>
             <a class="navbar-brand text-primary" href="../index.php?action=none">ClassQuiz</a>
         </div>
-
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -31,8 +25,8 @@ $userType = $_SESSION['userType'];
                 <li class=""><a href="../index.php?action=logout">Log Out</a></li>
                 <?php endif; ?>
                 
-                
-<!--                <li><a href="#">Link</a></li>
+                <li class=""><a href="#">My Account</a></li>
+<!--           
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -55,7 +49,6 @@ $userType = $_SESSION['userType'];
                 </div>
                     <button type="submit" class="btn btn-success" name="action" value="login_nav">Sign in</button> 
             </form>-->
-
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>     

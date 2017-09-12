@@ -35,7 +35,7 @@ else{
                             <td><input type="password" class="form-control" size="25" name="password" value=""/></td>
                         </tr>
                         <tr>
-                            <td><button type="submit" class="btn btn-primary" name="action" value="login_nav">Log In</button></td>
+                            <td><button type="submit" class="btn btn-primary" style="padding:6px 10px;" name="action" value="login_nav">Log In</button></td>
                         </tr>
                         <tr>
                             <td></td>

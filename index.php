@@ -1,9 +1,7 @@
 <?php
 
 // this is going to be a controller
-//include 'database.php';
-//include 'database_user.php';
-//include '../ClassQuiz/shared/navigation.php';
+
 session_start();
 session_destroy();
 

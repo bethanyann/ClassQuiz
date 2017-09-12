@@ -1,5 +1,5 @@
 <?php
-include '../ClassQuiz/shared/navigation.php';
+
 // *****QUIZ CREATION CONTROLLER *****
 //start session
 $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
@@ -10,6 +10,7 @@ require_once('../database.php');
 include '../classes/Quiz.php';
 include '../classes/Question.php';
 include '../classes/Answer.php';
+//include_once '../shared/navigation.php';
 //get the action from the POST/GET
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {

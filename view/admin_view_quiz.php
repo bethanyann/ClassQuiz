@@ -1,7 +1,7 @@
 <?php
 $userType = $_SESSION['userType'];
 if ($userType != 'admin') { //this works!!!!!!
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     die; //redirect user to home page if they are not admin
 }
 //get the quiz out of the session
@@ -29,7 +29,7 @@ editing the quiz
         <script src="../scripts/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
-        <?php include '../shared/navigation.php'; ?>
+       <?php  include'../shared/navigation.php'; ?>
         <div class="container-fluid" style="min-height: 400px">
             <!-- Example row of columns -->
             <div class="row">

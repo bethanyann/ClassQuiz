@@ -2,12 +2,12 @@
 //make sure admin is signed in
 $userType = $_SESSION['userType'];
 if ($userType != 'admin') { //this works!!!!!!
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     die; //redirect user to home page if they are not admin
 }
 //this forces user to go through the admin login page before they can view this page
 if (!$adminCourses) {
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     die;
 }
 ?>
@@ -25,17 +25,18 @@ if (!$adminCourses) {
     <script src="../scripts/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
 
-<body>
-
+<body>  
+    <?php include'../shared/navigation.php';?>
     <div class="container-fluid">
+      
         <div class="row">
             <?php include '../shared/admin_navigation.php'; ?>
             <h2 class="text-center">Administrator Dashboard</h2>
-            <div class="col-sm-7">
+            <div class="col-sm-9" style="padding-left:20px;">
                 <h3>Current Courses</h3>         
                 <table class="table table-responsive table-bordered">
                     <tr>
-                        <th class="text-center">Course Number</th>
+                        <th class="text-center">Course #</th>
                         <th class="text-center">Course Name</th>      
                     </tr>
                     <?php foreach ($adminCourses as $course) : ?>                       
@@ -44,24 +45,30 @@ if (!$adminCourses) {
                             <td class="courseName"><?php echo $course['courseName'] ?></td>
                             <td>
                                 <form action="admin_controller.php" metod="POST">
-                                    <button type="submit" class="btn-link" name="action" value="viewQuizzes">View Course Quizzes</button>
+                                    <button type="submit" class="btn-link" name="action" value="viewQuizzes">View Quizzes</button>
                                     <input type="hidden" name="courseID" value="<?php echo $course['courseID'] ?>">
                                     <input type="hidden" name="courseName" value="<?php echo $course['courseName'] ?>">
                                 </form>
                             </td>
                             <td>
                                 <form action="admin_controller.php" metod="POST">
-                                    <button type="submit" class="btn-link" name="action" value="manageStudents">View Course Participants</button>
+                                    <button type="submit" class="btn-link" name="action" value="manageStudents">Course Students</button>
                                     <input type="hidden" name="courseID" value="<?php echo $course['courseID'] ?>">
                                     <input type="hidden" name="courseName" value="<?php echo $course['courseName'] ?>">
+                                </form>
+                            </td>
+                            <td>
+                                <form action="admin_controller.php" metod="POST">
+                                    <button type="submit" class="btn btn-primary" name="action" value="deleteCourse">Delete Course</button>
+                                    <input type="hidden" name="courseID" value="<?php echo $course['courseID'] ?>">
                                 </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </table>
             </div>       
-            <div class="col-sm-5">
-                <h3>Add a new course</h3>
+            <div class="col-sm-5" style="padding-left:20px;">
+                <!--ADD A NEW COURSE--><h3>Add a new course</h3>
                 <form class="form-group" action="admin_controller.php" method="POST"> <!-- adding a new course to db-->
                     <table class="table table-responsive ">
                         <tr class="form-group">
@@ -72,7 +79,7 @@ if (!$adminCourses) {
                         <tr class="form-group ">
                             <td class="col-sm-4 text-left"><label for="">Course Number: </label></td>          
                             <td class="col-sm-1 text-right"><input class="form-control" type="text" name="courseNumber" id="course_num" style="width:150px;" required>
-                            <td><span class="error text-danger" id="chapterError" value="<?php if (isset($error_message)) { echo $error_message;  } ?>">*</span></td>
+                            <td><span class="error text-danger" id="chapterError" value="<?php if (isset($error_message)) { echo $error_message; } ?>">*</span></td>
                         </tr>
                         <tr class="form-group">
                             <td><input type="hidden" name="action" value="addCourse"</td>
