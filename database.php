@@ -6,7 +6,7 @@ $dsn = 'mysql:host=localhost;dbname=class_quiz';
 $username = 'root';
 $password = '';
 
-//GET DATABASE
+//GET DATABASE CONNECTION
 try {
     $db = new PDO($dsn, $username, $password);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -14,8 +14,7 @@ try {
     $error_message = $e->getMessage();
     echo $error_message;
 }
-
-//This function gets the Courses associated with the currently-logged-in Administrator account
+//GETS THE COURSES ASSOCIATED WITH THE ADMIN ACCOUNT THAT IS LOGGED IN
 function GetAdminCourses($adminID) {
     global $db;
 
@@ -33,12 +32,12 @@ function GetAdminCourses($adminID) {
         $results = $statement->fetchAll();
         $statement->closeCursor();
     } catch (Exception $ex) {
+        echo $ex;
         $results = false;
     }
     return $results;
 }
-
-//This function gets the Quizzes associated with a certain Course selection 
+//GETS QUIZZES ASSOCIATED WITH A CERTAIN COURSE SELECTION
 function GetCourseQuizzes($courseID) {
     global $db;
 
@@ -54,13 +53,75 @@ function GetCourseQuizzes($courseID) {
         $statement->closeCursor();
     } catch (Exception $ex) {
         $results = false;
+        echo $ex;
     }
     return $results;
 }
+//GETS ALL STUDENTS NOT ASSIGNED TO A SPECFIC COURSE YET
+function GetAllStudentsNotInACertainCourse($courseID)
+{
+    global $db;   
+    try
+    {
+        $query = 'SELECT * FROM student WHERE studentID NOT IN'
+               . '(SELECT studentID FROM student_course WHERE courseID = :courseIDPlaceholder)';
+        
+        $statement = $db->prepare($query);
+        $statement->bindValue(':courseIDPlaceholder', $courseID);
+        $statement->execute();
 
-//This function gets a list of Students associated with a Course
+        $results = $statement->fetchAll();
+    } catch (Exception $ex) {
+        echo $ex;
+        $results = false;
+    }
+    return $results;
+}
+//GETS STUDENTS THAT ARE ASSIGNED TO A SPECFIC COURSE
+function GetCourseStudents($courseID)
+{
+    global $db;   
+    try
+    {
+        $query = 'SELECT * FROM student WHERE studentID IN'
+               . '(SELECT studentID FROM student_course WHERE courseID = :courseIDPlaceholder)';
+        
+        $statement = $db->prepare($query);
+        $statement->bindValue(':courseIDPlaceholder', $courseID);
+        $statement->execute();
 
-//This function gets a selected Quiz, Questions, and Answers by quizID #
+        $results = $statement->fetchAll();
+    } catch (Exception $ex) {
+        echo $ex;
+        $results = false;
+    }
+    return $results;
+}
+//ASSIGNS A STUDENT TO A SPECFIC COURSE
+function AssignStudentToCourse($studentID,$courseID)
+{
+    global $db;
+    try {
+        $query = 'INSERT INTO student_course (studentID,courseID)'
+                . 'VALUES(:studentIDPlaceholder,:courseIDPlaceholder)';
+        
+        $statement = $db->prepare($query);
+        $statement->bindValue(':studentIDPlaceholder', $studentID);
+        $statement->bindValue(':courseIDPlaceholder', $courseID);
+        $rows = $statement->execute();
+        
+        if($rows>0)
+        {
+            $success=true;
+        }
+        
+    } catch (Exception $ex) {
+        echo $ex;
+        $success = false;
+    }
+    return $success;
+}
+//GETS A SELECTED QUIZ, QUESTIONS, AND ANSWERS BY QUIZ ID#
 function GetQuizByQuizID($quiz) {
     global $db;
 
@@ -119,7 +180,7 @@ function GetQuizByQuizID($quiz) {
 
     return $questionList; //might change this cuz technically I want to return the full quiz object
 }
-//Saves a quiz object to the database
+//SAVES A QUIZ OBJECT TO THE DATABASE
 function SaveQuiz($quiz) {
     global $db;
     $results = false;
@@ -143,11 +204,11 @@ function SaveQuiz($quiz) {
         }
         $statement->closeCursor();
     } catch (Exception $ex) {
-        
+        echo $ex;
     }
     return $results;
 }
-//Saves all the Questions and their Answers associated with one Quiz to the database
+//SAVES ALL THE QUESIONS/ANSWERS ASSOCIATED WITH ONE QUIZ INTO THE DATABASE
 function SaveQuestions($id, $quiz) {
     global $db;
     $results = false;
@@ -196,9 +257,8 @@ function SaveQuestions($id, $quiz) {
         }
     } //end of the FOREACH block for the questions
     return $results;
-}//END SAVE QUESTION
-
-//DELETE QUIZ
+}
+//DELETES A QUIZ AND ALL ASSOCIATED QUESTIONS/ANSWERS FROM THE DATABASE
 function DeleteQuiz($quizID) {
     global $db;
     $results = false;
@@ -216,11 +276,10 @@ function DeleteQuiz($quizID) {
             $results = true;
         }
     } catch (Exception $ex) {
-        
+        echo $ex;
     }
     return $results;
 }
-
 //MAKES SURE THE CHAPTER NUMBER DOES NOT EXIST ALREADY
 function ValidateQuizChapter($cID, $chNum) {
     global $db;
@@ -299,9 +358,7 @@ function DeleteCourse($courseID,$adminID)
             } catch (Exception $ex) {
                 echo $ex;
                 $success=false;
-            }
-            
-            
+            }         
         }
     } catch (Exception $ex) {
         echo $ex;

@@ -35,7 +35,7 @@ switch($action){
         //if user logged in is an admin   
         $adminID = $_SESSION['userID'];
         $adminCourses = GetAdminCourses($adminID);
-        
+        $_SESSION['adminCourses'] = $adminCourses;
         include '../view/admin_dashboard.php';
         die();
     case 'viewQuizzes':  
@@ -53,16 +53,6 @@ switch($action){
         //send to admin dashboard quiz view page.
         include '../view/admin_quiz_list.php';
         break; 
-    case 'manageStudents':
-        //get the students associated with a specfic class
-        $courseName = $_SESSION['courseName'];
-        $courseID = $_SESSION['courseID'];
-        
-        //database call
-        $listOfStudents = GetCourseStudents($courseID);
-        
-        
-        break;
     case 'addCourse' :
         $cname = filter_input(INPUT_POST,'courseName');
         $cnum = filter_input(INPUT_POST, 'courseNumber');
@@ -93,6 +83,21 @@ switch($action){
             //go back to admin page
             include '../view/admin_dashboard.php';
         }
+        break;
+    case 'manageStudents': //get the students associated with a specfic class  
+        $courseName = filter_var($_REQUEST['courseName']); 
+        $courseID = filter_var($_REQUEST['courseID']); 
+        //database call
+        $listOfStudents = GetCourseStudents($courseID);
+        $listOfAllStudents = GetAllStudentsNotInACertainCourse($courseID);
+        
+        $_SESSION['courseName']=$courseName;
+        $_SESSION['courseID']=$courseID;
+        include '../view/admin_manage_students.php';
+        break;
+    case 'saveNewStudent' :
+        break;
+    case 'saveExistingStudent' :
         break;
     default:
         break;
