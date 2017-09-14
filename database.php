@@ -97,6 +97,32 @@ function GetCourseStudents($courseID)
     }
     return $results;
 }
+//INSERT NEW STUDENT INTO THE DB
+function AddNewStudent($studentID,$firstName,$lastName)
+{
+     global $db;
+    try {
+        $query = 'INSERT INTO student(studentID,studentFirstName,studentLastName)'
+                . 'VALUES(:studentIDPlaceholder,:firstNamePlaceholder, :lastNamePlaceholder)';
+        
+        $statement=$db->prepare($query);
+        $statement->bindValue(':studentIDPlaceholder',$studentID);
+        $statement->bindValue(':firstNamePlaceholder',$firstName);
+        $statement->bindValue(':lastNamePlaceholder',$lastName);
+        $rows = $statement->execute();
+        if($rows)
+        {
+            $success=true;
+        }
+        
+    }
+    catch(Exception $ex)
+    {
+        $success = false;
+        echo $ex;
+    }
+    return $success;
+}
 //ASSIGNS A STUDENT TO A SPECFIC COURSE
 function AssignStudentToCourse($studentID,$courseID)
 {
@@ -110,7 +136,7 @@ function AssignStudentToCourse($studentID,$courseID)
         $statement->bindValue(':courseIDPlaceholder', $courseID);
         $rows = $statement->execute();
         
-        if($rows>0)
+        if($rows)
         {
             $success=true;
         }

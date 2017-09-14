@@ -95,9 +95,57 @@ switch($action){
         $_SESSION['courseID']=$courseID;
         include '../view/admin_manage_students.php';
         break;
-    case 'saveNewStudent' :
+    case 'saveNewStudent' : //saves a new user entered student to the db and to a course
+        $courseID = $_SESSION['courseID'];
+        $stuID = filter_input(INPUT_POST, 'stuID');
+        $fName = filter_input(INPUT_POST, 'firstName');
+        $lName = filter_input(INPUT_POST, 'lastName');
+        
+        $studentID=htmlspecialchars($stuID);
+        $firstName=htmlspecialchars($fName);
+        $lastName=htmlspecialchars($lName);
+        
+        //insert new student into db
+         $success =AddNewStudent($studentID,$firstName,$lastName);
+        //add student to the course
+        if($success)
+        {
+            AssignStudentToCourse($studentID,$courseID);
+        }
+        else
+        {
+            //panic
+        }
+        //get new list of students assigned to course
+        $listOfStudents = GetCourseStudents($courseID);
+        //get list of students not assigned to course
+        $listOfAllStudents = GetAllStudentsNotInACertainCourse($courseID);
+        include '../view/admin_manage_students.php';
+        
         break;
-    case 'saveExistingStudent' :
+    case 'removeStudent' :
+        $courseID = filter_input(INPUT_POST, "courseID");
+        $studentID = filter_input(INPUT_POST, "studentID");
+        //go to db and remove student from class
+        RemoveStudentFromCourse($studentID,$courseID);
+        //return a new list of students assigned to the course
+        $listOfStudents=GetCourseStudents($courseID);
+        //return all of the students not assigned to this course
+        $listOfAllStudents=GetAllStudentsNotInACertainCourse($courseID);
+        //go back to the calling page
+        include '../view/admin_manage_students.php';
+    case 'saveExistingStudent' : //saves an existing student to a new course
+        $courseID = $_SESSION['courseID'];
+        //get selected student from the select box
+        $studentID = filter_var($_POST['studentsToAdd']);
+        //go to db and assign that student to the course
+        AssignStudentToCourse($studentID,$courseID);
+        //return a new list of students assigned to the course
+        $listOfStudents = GetCourseStudents($courseID);
+        //return the students not assigned to this course
+        $listOfAllStudents = GetAllStudentsNotInACertainCourse($courseID);
+        //go back to the calling page
+        include '../view/admin_manage_students.php';
         break;
     default:
         break;

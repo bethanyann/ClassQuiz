@@ -27,7 +27,6 @@ if (!$adminCourses) {
 <body>  
     <?php include'../shared/navigation.php';?>
     <div class="container-fluid">
-      
         <div class="row">
             <?php include '../shared/admin_navigation.php'; ?>
             <h2 class="text-center">Administrator Dashboard</h2>

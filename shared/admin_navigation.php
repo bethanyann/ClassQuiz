@@ -8,12 +8,12 @@
         <!--<li class="" style="padding-left:10px;"><a href=""> <span class="link-title">&nbsp;Manage Students</span></a></li>
             <li class="" style="padding-left:10px;"><a href=""> <span class="link-title">&nbsp;Manage Account</span></a></li> -->              
             <li class="dropdown" style="padding-left:10px;">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Courses<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Quizzes<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="font-size:.8em" style="padding-left:10px;">
                         <?php foreach ($adminCourses as $course) : ?>
                         <?php $queryString = "?action=viewQuizzes". "&courseID=" . $course['courseID'] . "&courseName=" . $course['courseName'];?>
-                        <li style="padding-left:7px;"><a href="../controller/admin_controller.php<?php echo $queryString ?>"><?php if(isset($course['courseID']) && isset($course['courseName'])){ echo $course['courseID']."-".$course['courseName']; }?></a></li>
-                        <li role="separator" class="divider" style="padding:0px;"></li>
+                            <li style="padding-left:7px;"><a href="../controller/admin_controller.php<?php echo $queryString ?>"><?php  echo $course['courseID']."-".$course['courseName']; ?></a></li>
+                            <li role="separator" class="divider" style="padding:0px;"></li>
                         <?php endforeach; ?>        
                     </ul>
             </li>         
