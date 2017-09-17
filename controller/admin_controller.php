@@ -134,6 +134,14 @@ switch($action){
         $listOfAllStudents=GetAllStudentsNotInACertainCourse($courseID);
         //go back to the calling page
         include '../view/admin_manage_students.php';
+        break;
+    case 'editStudent' :
+        $studentID = filter_input(INPUT_POST, "studentID");
+        $studentFirstName = filter_input(INPUT_POST, "studentFName");
+        $studentLastName = filter_input(INPUT_POST, "studentLName");
+        $_SESSION['studentID']=$studentID;
+        include'../view/admin_edit_student.php';    
+        break;
     case 'saveExistingStudent' : //saves an existing student to a new course
         $courseID = $_SESSION['courseID'];
         //get selected student from the select box
@@ -141,6 +149,22 @@ switch($action){
         //go to db and assign that student to the course
         AssignStudentToCourse($studentID,$courseID);
         //return a new list of students assigned to the course
+        $listOfStudents = GetCourseStudents($courseID);
+        //return the students not assigned to this course
+        $listOfAllStudents = GetAllStudentsNotInACertainCourse($courseID);
+        //go back to the calling page
+        include '../view/admin_manage_students.php';
+        break;
+    case 'saveEditStudent' :
+        $studentID = $_SESSION['studentID'];
+        $studentFirstName = filter_input(INPUT_POST, 'firstName');
+        $studentLastName = filter_input(INPUT_POST, 'lastName');
+        
+        $success = EditStudent($studentID,$studentFirstName,$studentLastName);
+        
+        //now go back to the class the student was on? 
+        $courseID = $_SESSION['courseID'];
+          //return a new list of students assigned to the course
         $listOfStudents = GetCourseStudents($courseID);
         //return the students not assigned to this course
         $listOfAllStudents = GetAllStudentsNotInACertainCourse($courseID);

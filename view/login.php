@@ -22,20 +22,24 @@ else{
 <?php include'../shared/navigation.php'?>
     <div class="container-fluid">
         <div class="row">     
-            <h2 class="text-center">Log In to your Account</h2>
-            <div class="col-sm-6 col-sm-offset-3">
+            <h2 class="text-center" style="margin-top:20px; margin-bottom:30px;">Log In to your Account</h2>
+           
+            <div class="col-sm-4 col-sm-offset-4">
                 <form action="../controller/login_controller.php" method="POST">
-                    <table class="table table-responsive" id="login_table">
-                        <tr>
-                            <th><label>Username:</label></th>
+                    <table class=" table-responsive" id="login_table">
+                        <tr></tr>
+                        <tr style='margin-top:20px;'>
+                            <th><label>Username:  </label></th>
                             <td><input type="text" class="form-control" size="25" name="username" value="<?php if(isset($username)){echo $username;}?>"/></td>
                        </tr>
+                       <tr></tr>
                         <tr>  
-                            <th><label>Password:</label></th>
+                            <th><label>Password:  </label></th>
                             <td><input type="password" class="form-control" size="25" name="password" value=""/></td>
                         </tr>
                         <tr>
-                            <td><button type="submit" class="btn btn-primary" style="padding:6px 10px;" name="action" value="login_nav">Log In</button></td>
+                            <td></td>
+                            <td><button type="submit" class="btn btn-primary center-block col-sm-offset-3" style="padding:6px 10px; margin-top:10px;" name="action" value="login_nav">Log In</button></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -47,6 +51,7 @@ else{
                         </tr>
                     </table> 
                 </form>        
+            
             </div>
         </div>
     </div>

@@ -4,16 +4,71 @@ if ($userType != 'admin') { //this works!!!!!!
     header("Location: ../index.php");
     die; //redirect user to home page if they are not admin
 }
-
 ?>
-<!DOCTYPE html>
 <!-- THIS IS THE ADMIN HOME PAGE FOR THE CLASS QUIZ site --> 
+<!DOCTYPE html>
+<!--AJAX function to validate the student ID doesn't exist before adding a new student -->
+<script>
+    //ajax function to make sure the student ID doesn't exist already
+    function validateStudentID(studentID) {
+        if (studentID === "" || isNaN(studentID) || studentID <= 0) {
+            document.getElementById("stuIDError").innerHTML = "Please enter a valid student identification number";
+            
+            return;
+        } 
+        else if(studentID.length < 6)
+        {
+            document.getElementById("stuIDError").innerHTML = "Student ID Number must be 6 digits.";
+           
+            return;
+        }
+        else
+        {
+            var ajaxRequest;
+            if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                ajaxRequest = new XMLHttpRequest();
+            } else {
+                // code for IE6, IE5
+                ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            //function that will receive data sent from the server and will update error message				
+            ajaxRequest.onload = function () {
+                if (ajaxRequest.readyState === 4 && ajaxRequest.status === 200)
+                {
+                    var result = ajaxRequest.responseText;
+                    if (result === "true")
+                    {
+                        //if result is true that means the student ID exists in the database already and 
+                        //it shouldn't be saved
+                        document.getElementById("stuIDError").innerHTML = "The student ID # " + studentID + " already exists.";
+                        var button = document.getElementById("save_new_student");
+                        button.disabled = true;
+                    } else
+                    {   //passed chapter validation, now check the num questions
+                        document.getElementById("stuIDError").innerHTML = "*";
+                        var button = document.getElementById("save_new_student");
+                        button.disabled = false;
+                        
+                        //can check the first and last name for validation here too maybe?
+                    }
+                } else { //put something here if the ajax response doesn't work
+                }
+            };
+
+            var queryString = "?stuID=" + studentID;
+            ajaxRequest.open("GET", "../ajax_validation_student.php" + queryString, true);
+            ajaxRequest.send();
+        }
+    };
+</script>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Manage Students</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="jquery-1.11.2.min.js"></script>
+    <script src="../scripts/vendor/jquery-1.11.2.min.js"></script>
     <script src="../scripts/vendor/bootstrap.js"></script>
     <script src="../scripts/vendor/bootstrap.min.js"></script>
     
@@ -41,13 +96,12 @@ if ($userType != 'admin') { //this works!!!!!!
                         <div class="col-sm-8">    <!--DISPLAY STUDENTS ASSIGNED TO THIS COURSE -->                                      
                             <h2 class="text-center"> <?php echo $_SESSION['courseName'] ?></h2>
                             <h3>Students assigned to this course: </h3>
-                                <form action="admin_controller.php" method="POST">
                                     <table class="table table-responsive"> 
                                         <thead>
                                            <th>Student ID#</th> 
                                            <th>First Name</th>
                                            <th>Last Name</th>
-                                           <th>remove student</th>
+                                           <th>remove student from class</th>
                                            <th>edit student</th>
                                         </thead>
                                         <tbody>
@@ -57,11 +111,15 @@ if ($userType != 'admin') { //this works!!!!!!
                                             <td><?php echo htmlspecialchars($student['studentID']) ?></td>    
                                             <td><?php echo htmlspecialchars($student['studentFirstName']) ?></td>
                                             <td><?php echo htmlspecialchars($student['studentLastName']) ?></td>
-                                            <td><button type="submit" class="btn btn-primary" name="action" value="removeStudent">remove from class</button></td>
-                                            <td><button type="submit" class="btn btn-primary"  name="action" value="viewQuiz">edit student</button></td>
+                                                <form action="admin_controller.php" method="POST">
+                                                    <td><button type="submit" class="btn btn-primary" name="action" value="removeStudent">remove from class</button></td>
+                                                    <td><button type="submit" class="btn btn-primary" name="action" value="editStudent">edit student</button></td>
                                                 <input type="hidden" name="studentID" value="<?php echo $student['studentID'] ?>">
                                                 <input type="hidden" name="courseID" value="<?php echo $_SESSION['courseID'] ?>">
-                                        </tr>
+                                                <input type="hidden" name="studentFName" value="<?php echo $student['studentFirstName'] ?>">
+                                                <input type="hidden" name="studentLName" value="<?php echo $student['studentLastName'] ?>">
+                                                </form>
+                                       </tr>
                                         <?php endforeach; ?>
                                         </tbody>           
                                     </table>
@@ -95,17 +153,17 @@ if ($userType != 'admin') { //this works!!!!!!
                     <form class="form-group" action="admin_controller.php" method="POST"> <!--building a new quiz directs to the quiz controller-->
                         <table class="table table-responsive co-sm-3 ">
                             <tr class="form-group">
-                                <td class="col-xs-1 text-left align-middle"><label for="stuID">Student ID #: </label></td>
-                                <td class="col-xs-1 text-right"><input class="form-control" type="text"  name="stuID" id="student_id" style="width:150px;" onkeyup="" required></td>
+                                <td class="col-sm-1 text-left align-middle"><label for="stuID">Student ID #: </label></td>
+                                <td class="col-xs-1 text-right"><input class="form-control" type="text"  name="stuID" id="student_id" style="width:150px;" onkeyup="validateStudentID(this.value)" required></td>
                                 <td><h4 class="error text-danger align-middle" id="stuIDError">*</h4></td>
                             </tr>
                             <tr class="form-group ">
-                                <td class="col-xs-1 text-left align-middle"><label for="chapterNum">Student First Name: </label></td>          
+                                <td class="col-sm-1 text-left align-middle"><label for="chapterNum">Student First Name: </label></td>          
                                 <td class="col-xs-1 text-right"><input class="form-control" type="text" name="firstName" id="first_name" style="width:150px;" required> 
                                 <td><h4 class="error text-danger align-middle" id="firstNameError" >*</h4></td>
                             </tr>
                             <tr class="form-group ">
-                                <td class="col-xs-1 text-left align-middle"><label for="chapterNum">Student Last Name: </label></td>          
+                                <td class="col-sm-1 text-left align-middle"><label for="chapterNum">Student Last Name: </label></td>          
                                 <td class="col-xs-1 text-right"><input class="form-control" type="text" name="lastName" id="last_name" style="width:150px;" required> 
                                 <td><h4 class="error text-danger align-middle" id="lastNameError" >*</h4></td>
                             </tr>

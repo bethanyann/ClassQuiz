@@ -64,7 +64,7 @@ $courseID = $_SESSION['courseID'];
             };
 
             var queryString = "?n=" + chNum + "&c=" + courseID;
-            ajaxRequest.open("GET", "../ajax_validation.php" + queryString, true);
+            ajaxRequest.open("GET", "../ajax_validation_chapter.php" + queryString, true);
             ajaxRequest.send();
         }
     }

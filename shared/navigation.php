@@ -25,7 +25,7 @@ else{$userType = $_SESSION['userType'];}
                 <li class=""><a href="../index.php?action=logout">Log Out</a></li>
                 <?php endif; ?>
                 
-                <li class=""><a href="#">My Account</a></li>
+                <!--<li class=""><a href="#">My Account</a></li>-->
 <!--           
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>

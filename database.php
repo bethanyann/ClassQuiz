@@ -123,6 +123,53 @@ function AddNewStudent($studentID,$firstName,$lastName)
     }
     return $success;
 }
+//DELETES A STUDENT FROM A COURSE
+ function RemoveStudentFromCourse($studentID,$courseID)
+ {
+       $results = false;
+       global $db;
+    try {
+        $query = 'DELETE FROM student_course
+                    WHERE studentID = :studentIDPlaceholder AND courseID = :courseIDPlaceholder';
+
+        $statement = $db->prepare($query);
+        $statement->bindValue(':studentIDPlaceholder', $studentID);
+        $statement->bindValue(':courseIDPlaceholder', $courseID);
+        $success = $statement->execute();
+        $row_count = $statement->rowCount();
+
+        if ($success && $row_count > 0) {
+            $results = true;
+        }
+    } catch (Exception $ex) {
+        echo $ex;
+    }
+    return $results;
+ }
+ //EDIT STUDENT INFO FOR EXISTING STUDENT
+ function EditStudent($studentID,$studentFirstName,$studentLastName)
+ {
+     global $db;
+     $results = false;
+     
+     try {
+         $query = 'UPDATE student '.
+                 'SET studentFirstName = :studentFirstNamePlaceholder,
+                     studentLastName = :studentLastNamePlaceholder ' 
+                 . 'WHERE studentID = :studentIDPlaceholder';
+         $statement = $db->prepare($query);
+         $statement->bindValue(':studentFirstNamePlaceholder', $studentFirstName);
+         $statement->bindValue(':studentLastNamePlaceholder', $studentLastName);
+         $statement->bindValue(':studentIDPlaceholder', $studentID);
+         
+         $success = $statement->execute();
+         
+     } catch (Exception $ex) {
+            echo $ex;        
+     }
+     return $success;
+ }
+ 
 //ASSIGNS A STUDENT TO A SPECFIC COURSE
 function AssignStudentToCourse($studentID,$courseID)
 {
